@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/event_list.dart';
 import 'package:flutter/material.dart';
 
 class SearchTab extends StatefulWidget {
@@ -10,6 +11,6 @@ class SearchTab extends StatefulWidget {
 class _SearchTabState extends State<SearchTab> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const EventList();
   }
 }

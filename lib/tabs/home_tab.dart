@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/event_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -15,20 +16,9 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
+          const Expanded(
             flex: 2,
-            child: ListView.builder(
-              clipBehavior: Clip.none,
-              itemBuilder: (_, index){
-              return Card(
-                child: ListTile(
-                  leading: const Icon(Icons.abc),
-                  title: const Text('Placeholder'),
-                  subtitle: Text('$index'),
-                  onTap: (){},
-                  ),
-              );
-              })),
+            child: EventList()),
         Expanded(
           flex: 1,
           child: Card(
