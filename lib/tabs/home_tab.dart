@@ -17,7 +17,7 @@ class _HomeTabState extends State<HomeTab> {
         children: [
           Expanded(
             flex: 2,
-            child: ListView.builder(itemBuilder: (_, index){})),
+            child: ListView.builder(itemBuilder: (_, index){return const Placeholder();})),
         Expanded(
           flex: 1,
           child: Card(
@@ -26,7 +26,7 @@ class _HomeTabState extends State<HomeTab> {
             elevation: 10,
             child: FlutterMap(options: const MapOptions(
               initialCenter: LatLng(38.1858, 15.5561),
-              initialZoom: 17
+              initialZoom: 16
               ), 
             children: [
               TileLayer(
