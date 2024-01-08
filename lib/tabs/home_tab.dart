@@ -17,7 +17,18 @@ class _HomeTabState extends State<HomeTab> {
         children: [
           Expanded(
             flex: 2,
-            child: ListView.builder(itemBuilder: (_, index){})),
+            child: ListView.builder(
+              clipBehavior: Clip.none,
+              itemBuilder: (_, index){
+              return Card(
+                child: ListTile(
+                  leading: const Icon(Icons.abc),
+                  title: const Text('Placeholder'),
+                  subtitle: Text('$index'),
+                  onTap: (){},
+                  ),
+              );
+              })),
         Expanded(
           flex: 1,
           child: Card(
