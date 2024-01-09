@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class EventList extends StatefulWidget {
-  const EventList({super.key});
+  const EventList({super.key, this.mapController});
+  final MapController? mapController;
 
   @override
   State<EventList> createState() => _EventListState();
@@ -13,6 +16,9 @@ class _EventListState extends State<EventList> {
 
   void onTap(int current) {
     setState(() {
+      if (widget.mapController != null){
+      widget.mapController!.move(const LatLng(38.1858, 15.5561), 16);
+      }
       selectedIndex = current;
     });
   }
@@ -44,7 +50,7 @@ class _EventListState extends State<EventList> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text("Price here", style: TextStyle(fontWeight: FontWeight.bold),),
-                          Icon(Icons.favorite),
+                          IconButton(icon: Icon(Icons.favorite), onPressed: null,),
                       ],)
                     ],
                   ),

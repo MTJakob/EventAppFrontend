@@ -11,32 +11,37 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  LatLng centralPoint = const LatLng(38.1858, 15.5561);
+
   @override
   Widget build(BuildContext context) {
+    final controller = MapController();
+
     return Scaffold(
       body: Column(
         children: [
-          const Expanded(
-            flex: 2,
-            child: EventList()),
-        Expanded(
-          flex: 1,
-          child: Card(
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(40))),
-            clipBehavior: Clip.hardEdge,
-            elevation: 10,
-            child: FlutterMap(options: const MapOptions(
-              initialCenter: LatLng(38.1858, 15.5561),
-              initialZoom: 16
-              ), 
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
-              )
-              ]),
-          ),
-        )
+          Expanded(flex: 2, child: EventList(mapController: controller)),
+          Expanded(
+            flex: 1,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
+              clipBehavior: Clip.hardEdge,
+              elevation: 10,
+              child: FlutterMap(
+                  mapController: controller,
+                  options: const MapOptions(
+                    keepAlive: true,
+                      initialCenter: LatLng(38.1858, 15.5561), initialZoom: 16),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.example.app',
+                    )
+                  ]),
+            ),
+          )
         ],
       ),
     );
