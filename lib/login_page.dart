@@ -1,4 +1,3 @@
-import 'package:event_flutter_application/main_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,8 +9,9 @@ class LoginPage extends StatelessWidget {
     TextEditingController pwdController = TextEditingController();
 
     void submit() {
-      Navigator.pushAndRemoveUntil(
-          context, MaterialPageRoute(builder: (context) => const MainPage()), (route){return "/" == route.toString();});
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) {
+        return route.toString() == "/";
+      });
     }
 
     return Scaffold(

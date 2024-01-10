@@ -1,4 +1,5 @@
 import 'package:event_flutter_application/login_page.dart';
+import 'package:event_flutter_application/main_page.dart';
 import 'package:flutter/material.dart';
 import 'data_widget.dart';
 
@@ -19,7 +20,11 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         darkTheme: ThemeData.dark(),
-        home: const LoginPage(),
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/main': (context) => const MainPage()
+        },
       ),
     );
   }
