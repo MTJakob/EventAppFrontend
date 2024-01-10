@@ -28,7 +28,7 @@ class _HomeTabState extends State<HomeTab> {
         "Date": "21/02/2024",
         "Adress": {
             "x": 38.1858,
-            "y": 15.5561
+            "y": 15.5571
         },
         "Organiser": "Mark",
         "Price": 5
@@ -37,7 +37,7 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Concert",
         "Date": "25/02/2024",
         "Adress": {
-            "x": 38.1860,
+            "x": 38.1850,
             "y": 15.5560
         },
         "Organiser": "Don",
@@ -48,7 +48,7 @@ class _HomeTabState extends State<HomeTab> {
         "Date": "21/02/2024",
         "Adress": {
             "x": 38.1859,
-            "y": 15.5559
+            "y": 15.5569
         },
         "Organiser": "Anastasia",
         "Price": 0
@@ -57,7 +57,7 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Bowling",
         "Date": "10/02/2024",
         "Adress": {
-            "x": 38.1857,
+            "x": 38.1847,
             "y": 15.5563
         },
         "Organiser": "Anna",
@@ -67,7 +67,7 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Bake-off",
         "Date": "09/02/2024",
         "Adress": {
-            "x": 38.1858,
+            "x": 38.1878,
             "y": 15.5562
         },
         "Organiser": "Carol",
@@ -90,7 +90,7 @@ class _HomeTabState extends State<HomeTab> {
 
     List<LatLng> locations = [];
 
-    for (var i in data){
+    for (var i in data) {
       locations.add(LatLng(i["Adress"]["x"], i["Adress"]["y"]));
     }
 
@@ -114,7 +114,8 @@ class _HomeTabState extends State<HomeTab> {
                       child: ListTile(
                         leading: const Icon(Icons.abc),
                         title: Text(data[index]["Name"]),
-                        subtitle: EventCardBody(data[index], isSelected: selectedIndex == index),
+                        subtitle: EventCardBody(data[index],
+                            isSelected: selectedIndex == index),
                         onTap: () => onTap(index),
                       ),
                     );
@@ -137,7 +138,16 @@ class _HomeTabState extends State<HomeTab> {
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.example.app',
-                    )
+                    ),
+                    MarkerLayer(
+                      rotate: true,
+                        markers: locations
+                            .map((e) => Marker(
+                                alignment: const Alignment(0, -0.7),
+                                  point: e,
+                                  child: Icon(Icons.place, color: e == locations[selectedIndex!] ? Colors.red : Colors.yellow,)
+                                ))
+                            .toList())
                   ]),
             ),
           )
