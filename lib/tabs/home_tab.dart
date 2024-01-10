@@ -93,11 +93,15 @@ class _HomeTabState extends State<HomeTab> {
 
     void onTap(int currentId) {
       setState(() {
-        selectedId = currentId;
-        controller.move(
-            LatLng(data[currentId]!["Adress"]["x"],
-                data[currentId]!["Adress"]["y"]),
-            controller.camera.zoom);
+        if (selectedId != currentId) {
+          selectedId = currentId;
+          controller.move(
+              LatLng(data[currentId]!["Adress"]["x"],
+                  data[currentId]!["Adress"]["y"]),
+              controller.camera.zoom);
+        } else {
+          selectedId = null;
+        }
       });
     }
 
@@ -166,10 +170,12 @@ class _HomeTabState extends State<HomeTab> {
                     Container(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                            onPressed: () {
-                              controller.rotate(0);
-                            },
-                            icon: const Icon(Icons.navigation_rounded)))
+                          onPressed: () {
+                            controller.rotate(0);
+                          },
+                          icon: const Icon(Icons.navigation_rounded),
+                          color: Theme.of(context).primaryColor,
+                        ))
                   ]),
             ),
           )
