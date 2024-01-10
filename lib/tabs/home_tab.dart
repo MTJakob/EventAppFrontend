@@ -14,7 +14,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   LatLng centralPoint = const LatLng(38.1858, 15.5561);
 
-  int? selectedIndex;
+  int? selectedId;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,8 @@ class _HomeTabState extends State<HomeTab> {
 
     //this string is just for testing purposes
     //(easier to manage than adding an asset)
-    const String aaaaaaa = '''[
-    {
+    const String aaaaaaa = '''{
+    "12": {
         "Name": "Rave",
         "Date": "21/02/2024",
         "Adress": {
@@ -33,7 +33,7 @@ class _HomeTabState extends State<HomeTab> {
         "Organiser": "Mark",
         "Price": 5
     },
-    {
+    "122": {
         "Name": "Concert",
         "Date": "25/02/2024",
         "Adress": {
@@ -43,7 +43,7 @@ class _HomeTabState extends State<HomeTab> {
         "Organiser": "Don",
         "Price": 50
     },
-    {
+    "34": {
         "Name": "Fishing together",
         "Date": "21/02/2024",
         "Adress": {
@@ -53,7 +53,7 @@ class _HomeTabState extends State<HomeTab> {
         "Organiser": "Anastasia",
         "Price": 0
     },
-    {
+    "43": {
         "Name": "Bowling",
         "Date": "10/02/2024",
         "Adress": {
@@ -63,7 +63,7 @@ class _HomeTabState extends State<HomeTab> {
         "Organiser": "Anna",
         "Price": 10
     },
-    {
+    "9": {
         "Name": "Bake-off",
         "Date": "09/02/2024",
         "Adress": {
@@ -73,7 +73,7 @@ class _HomeTabState extends State<HomeTab> {
         "Organiser": "Carol",
         "Price": 10
     },
-    {
+    "145":{
         "Name": "DnD",
         "Date": "11/03/2024",
         "Adress": {
@@ -83,21 +83,21 @@ class _HomeTabState extends State<HomeTab> {
         "Organiser": "Ezekiel",
         "Price": 0
     }
-]
+  }
   ''';
 
-    var data = json.decode(aaaaaaa);
+    Map<int, Map<String, dynamic>> data = json
+        .decode(aaaaaaa)
+        .map<int, Map<String, dynamic>>((key, value) =>
+            MapEntry<int, Map<String, dynamic>>(int.parse(key), value));
 
-    List<LatLng> locations = [];
-
-    for (var i in data) {
-      locations.add(LatLng(i["Adress"]["x"], i["Adress"]["y"]));
-    }
-
-    void onTap(int current) {
+    void onTap(int currentId) {
       setState(() {
-        selectedIndex = current;
-        controller.move(locations[current], 16);
+        selectedId = currentId;
+        controller.move(
+            LatLng(data[currentId]!["Adress"]["x"],
+                data[currentId]!["Adress"]["y"]),
+            16);
       });
     }
 
@@ -110,13 +110,14 @@ class _HomeTabState extends State<HomeTab> {
                   clipBehavior: Clip.none,
                   itemCount: data.length,
                   itemBuilder: (_, index) {
+                    int dataId = data.keys.elementAt(index);
                     return Card(
                       child: ListTile(
                         leading: const Icon(Icons.abc),
-                        title: Text(data[index]["Name"]),
-                        subtitle: EventCardBody(data[index],
-                            isSelected: selectedIndex == index),
-                        onTap: () => onTap(index),
+                        title: Text(data[dataId]!["Name"]),
+                        subtitle: EventCardBody(data[dataId],
+                            isSelected: selectedId == dataId),
+                        onTap: () => onTap(dataId),
                       ),
                     );
                   })),
@@ -140,13 +141,21 @@ class _HomeTabState extends State<HomeTab> {
                       userAgentPackageName: 'com.example.app',
                     ),
                     MarkerLayer(
-                      rotate: true,
-                        markers: locations
-                            .map((e) => Marker(
-                                alignment: const Alignment(0, -0.7),
-                                  point: e,
-                                  child: Icon(Icons.place, color: e == locations[selectedIndex!] ? Colors.red : Colors.yellow,)
-                                ))
+                        rotate: true,
+                        markers: data
+                            .map((int key, value) => MapEntry(
+                                key,
+                                Marker(
+                                    alignment: const Alignment(0, -0.7),
+                                    point: LatLng(value["Adress"]["x"],
+                                        value["Adress"]["y"]),
+                                    child: Icon(
+                                      Icons.place,
+                                      color: key == selectedId
+                                          ? Colors.red
+                                          : Theme.of(context).primaryColor,
+                                    ))))
+                            .values
                             .toList())
                   ]),
             ),
