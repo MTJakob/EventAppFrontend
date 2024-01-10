@@ -97,7 +97,7 @@ class _HomeTabState extends State<HomeTab> {
         controller.move(
             LatLng(data[currentId]!["Adress"]["x"],
                 data[currentId]!["Adress"]["y"]),
-            16);
+            controller.camera.zoom);
       });
     }
 
@@ -151,7 +151,8 @@ class _HomeTabState extends State<HomeTab> {
                                         value["Adress"]["y"]),
                                     child: IconButton(
                                       iconSize: 30,
-                                      padding: const EdgeInsetsDirectional.all(0),
+                                      padding:
+                                          const EdgeInsetsDirectional.all(0),
                                       icon: Icon(
                                         Icons.place,
                                         color: key == selectedId
@@ -161,7 +162,14 @@ class _HomeTabState extends State<HomeTab> {
                                       onPressed: () => onTap(key),
                                     ))))
                             .values
-                            .toList())
+                            .toList()),
+                    Container(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                            onPressed: () {
+                              controller.rotate(0);
+                            },
+                            icon: const Icon(Icons.navigation_rounded)))
                   ]),
             ),
           )
