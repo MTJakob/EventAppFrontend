@@ -149,11 +149,16 @@ class _HomeTabState extends State<HomeTab> {
                                     alignment: const Alignment(0, -0.7),
                                     point: LatLng(value["Adress"]["x"],
                                         value["Adress"]["y"]),
-                                    child: Icon(
-                                      Icons.place,
-                                      color: key == selectedId
-                                          ? Colors.red
-                                          : Theme.of(context).primaryColor,
+                                    child: IconButton(
+                                      iconSize: 30,
+                                      padding: const EdgeInsetsDirectional.all(0),
+                                      icon: Icon(
+                                        Icons.place,
+                                        color: key == selectedId
+                                            ? Colors.red
+                                            : Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () => onTap(key),
                                     ))))
                             .values
                             .toList())
