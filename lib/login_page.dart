@@ -10,8 +10,8 @@ class LoginPage extends StatelessWidget {
     TextEditingController pwdController = TextEditingController();
 
     void submit() {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const MainPage()));
+      Navigator.pushAndRemoveUntil(
+          context, MaterialPageRoute(builder: (context) => const MainPage()), (route){return "/" == route.toString();});
     }
 
     return Scaffold(
@@ -47,7 +47,26 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              FilledButton.tonal(onPressed: submit, child: const Text("Submit"))
+              FilledButton.tonal(
+                  onPressed: submit, child: const Text("Submit")),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                const Text("Not registered yet?"),
+                TextButton(
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cancel")),
+                                TextButton(
+                                    onPressed: submit,
+                                    child: const Text("Register"))
+                              ],
+                            ),
+                        barrierDismissible: false),
+                    child: const Text("SIGN UP"))
+              ])
             ],
           ),
         ),
