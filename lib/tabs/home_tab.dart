@@ -20,13 +20,6 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     final controller = MapController();
 
-    void onTap(int current) {
-      setState(() {
-        selectedIndex = current;
-        controller.move(const LatLng(38.1858, 15.5561), 16);
-      });
-    }
-
     //this string is just for testing purposes
     //(easier to manage than adding an asset)
     const String aaaaaaa = '''[
@@ -34,8 +27,8 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Rave",
         "Date": "21/02/2024",
         "Adress": {
-            "x": 38.1,
-            "y": 15.5
+            "x": 38.1858,
+            "y": 15.5561
         },
         "Organiser": "Mark",
         "Price": 5
@@ -44,8 +37,8 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Concert",
         "Date": "25/02/2024",
         "Adress": {
-            "x": 38.3,
-            "y": 15.2
+            "x": 38.1860,
+            "y": 15.5560
         },
         "Organiser": "Don",
         "Price": 50
@@ -54,8 +47,8 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Fishing together",
         "Date": "21/02/2024",
         "Adress": {
-            "x": 38.2,
-            "y": 15.4
+            "x": 38.1859,
+            "y": 15.5559
         },
         "Organiser": "Anastasia",
         "Price": 0
@@ -64,8 +57,8 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Bowling",
         "Date": "10/02/2024",
         "Adress": {
-            "x": 37.9,
-            "y": 15.6
+            "x": 38.1857,
+            "y": 15.5563
         },
         "Organiser": "Anna",
         "Price": 10
@@ -74,8 +67,8 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "Bake-off",
         "Date": "09/02/2024",
         "Adress": {
-            "x": 38.3,
-            "y": 15.5
+            "x": 38.1858,
+            "y": 15.5562
         },
         "Organiser": "Carol",
         "Price": 10
@@ -84,8 +77,8 @@ class _HomeTabState extends State<HomeTab> {
         "Name": "DnD",
         "Date": "11/03/2024",
         "Adress": {
-            "x": 38,
-            "y": 15.5
+            "x": 38.1857,
+            "y": 15.5560
         },
         "Organiser": "Ezekiel",
         "Price": 0
@@ -94,6 +87,13 @@ class _HomeTabState extends State<HomeTab> {
   ''';
 
     var data = json.decode(aaaaaaa);
+
+    void onTap(int current) {
+      setState(() {
+        selectedIndex = current;
+        controller.move(LatLng(data[current]["Adress"]["x"], data[current]["Adress"]["y"]), 16);
+      });
+    }
 
     return Scaffold(
       body: Column(
