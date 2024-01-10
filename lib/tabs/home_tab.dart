@@ -88,10 +88,16 @@ class _HomeTabState extends State<HomeTab> {
 
     var data = json.decode(aaaaaaa);
 
+    List<LatLng> locations = [];
+
+    for (var i in data){
+      locations.add(LatLng(i["Adress"]["x"], i["Adress"]["y"]));
+    }
+
     void onTap(int current) {
       setState(() {
         selectedIndex = current;
-        controller.move(LatLng(data[current]["Adress"]["x"], data[current]["Adress"]["y"]), 16);
+        controller.move(locations[current], 16);
       });
     }
 
