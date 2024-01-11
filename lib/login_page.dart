@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/registration_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -22,7 +23,7 @@ class LoginPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             children: [
               const Text(
-                "Event manager",
+                "Event Manager",
                 textAlign: TextAlign.center,
                 textScaler: TextScaler.linear(2),
               ),
@@ -54,16 +55,7 @@ class LoginPage extends StatelessWidget {
                 TextButton(
                     onPressed: () => showDialog(
                         context: context,
-                        builder: (_) => AlertDialog(
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("Cancel")),
-                                TextButton(
-                                    onPressed: submit,
-                                    child: const Text("Register"))
-                              ],
-                            ),
+                        builder: (_) => const RegistrationDialog(),
                         barrierDismissible: false),
                     child: const Text("SIGN UP"))
               ])
