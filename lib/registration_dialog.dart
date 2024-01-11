@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
 
 class RegistrationDialog extends StatelessWidget {
@@ -8,10 +9,14 @@ class RegistrationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     void submit() {
-      if(formKey.currentState!.validate()){Navigator.pushNamedAndRemoveUntil(context, '/main', (route) {
-        return route.toString() == "/";
-      });}
+      if (formKey.currentState!.validate()) {
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) {
+          return route.toString() == "/";
+        });
+      }
     }
+
+    TextEditingController dateController = TextEditingController();
 
     return AlertDialog(
       title: const Text("Tell us about yourself"),
@@ -24,8 +29,14 @@ class RegistrationDialog extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             children: [
               TextFormField(
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                maxLength: 16,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (String? current){return isAlpha(current!) ? null : "Only english characters allowed!";},
+                validator: (String? current) {
+                  return isAlpha(current!)
+                      ? null
+                      : "Only english characters allowed!";
+                },
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 keyboardType: TextInputType.name,
@@ -33,8 +44,14 @@ class RegistrationDialog extends StatelessWidget {
                     prefixIcon: Icon(Icons.person), labelText: "Name"),
               ),
               TextFormField(
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                maxLength: 16,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (String? current){return isAlpha(current!) ? null : "Only english characters allowed!";},
+                validator: (String? current) {
+                  return isAlpha(current!)
+                      ? null
+                      : "Only english characters allowed!";
+                },
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 keyboardType: TextInputType.name,
@@ -42,7 +59,9 @@ class RegistrationDialog extends StatelessWidget {
                     prefixIcon: Icon(Icons.person), labelText: "Surname"),
               ),
               TextFormField(
-                validator: (String? current){return isEmail(current!) ? null : "Not a valid email adress!";},
+                validator: (String? current) {
+                  return isEmail(current!) ? null : "Not a valid email adress!";
+                },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
@@ -55,12 +74,27 @@ class RegistrationDialog extends StatelessWidget {
                     prefixIcon: Icon(Icons.lock), labelText: "Password"),
               ),
               TextFormField(
-                keyboardType: TextInputType.datetime,
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.calendar_today_rounded),
-                    labelText: "Birthday"),
-                    smartDashesType: SmartDashesType.enabled,
-              )
+                  validator: (String? current) {
+                    return isDate(current!) ? null : "Not a valid date!";
+                  },
+                  controller: dateController,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.calendar_today),
+                      labelText: "Birthday"),
+                  readOnly: true,
+                  onTap: () async {
+                    DateTime? picked = await showDatePicker(
+                        helpText: "Select your birthday",
+                        initialDatePickerMode: DatePickerMode.year,
+                        initialEntryMode: DatePickerEntryMode.calendarOnly,
+                        context: context,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now()
+                            .subtract(const Duration(days: 365 * 13)));
+                    if (picked != null) {
+                      dateController.text = picked.toString().split(' ')[0];
+                    }
+                  })
             ],
           ),
         ),
