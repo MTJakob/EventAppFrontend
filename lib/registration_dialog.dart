@@ -8,15 +8,26 @@ class RegistrationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+
+    TextEditingController nameController = TextEditingController();
+    TextEditingController surnameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController dateController = TextEditingController();
+
     void submit() {
       if (formKey.currentState!.validate()) {
+        // Map <String, String> formData = {
+        //   "Name" : nameController.text,
+        //   "Surname" : surnameController.text,
+        //   "Email" : emailController.text,
+        //   "DateOfBirth" : dateController.text
+        // };
         Navigator.pushNamedAndRemoveUntil(context, '/main', (route) {
           return route.toString() == "/";
         });
       }
     }
-
-    TextEditingController dateController = TextEditingController();
 
     return AlertDialog(
       title: const Text("Tell us about yourself"),
@@ -29,6 +40,7 @@ class RegistrationDialog extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             children: [
               TextFormField(
+                controller: nameController,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 maxLength: 16,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -44,6 +56,7 @@ class RegistrationDialog extends StatelessWidget {
                     prefixIcon: Icon(Icons.person), labelText: "Name"),
               ),
               TextFormField(
+                controller: surnameController,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 maxLength: 16,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -59,6 +72,7 @@ class RegistrationDialog extends StatelessWidget {
                     prefixIcon: Icon(Icons.person), labelText: "Surname"),
               ),
               TextFormField(
+                controller: emailController,
                 validator: (String? current) {
                   return isEmail(current!) ? null : "Not a valid email adress!";
                 },
@@ -68,6 +82,7 @@ class RegistrationDialog extends StatelessWidget {
                     prefixIcon: Icon(Icons.mail), labelText: "Email adress"),
               ),
               TextFormField(
+                controller: passwordController,
                 textInputAction: TextInputAction.next,
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -92,7 +107,7 @@ class RegistrationDialog extends StatelessWidget {
                         lastDate: DateTime.now()
                             .subtract(const Duration(days: 365 * 13)));
                     if (picked != null) {
-                      dateController.text = picked.toString().split(' ')[0];
+                      dateController.text = picked.toString().split(' ').first;
                     }
                   })
             ],
