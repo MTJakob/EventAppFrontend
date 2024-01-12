@@ -50,7 +50,7 @@ class _HomeTabState extends State<HomeTab> {
                           int.parse(key), value));
             }
             return Column(
-              children: [
+              children: [data.isEmpty ? const LinearProgressIndicator() : const SizedBox.shrink(),
                 Expanded(
                     flex: 2,
                     child: ListView.builder(
