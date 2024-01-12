@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_cache_manager/file.dart';
 
 class MyAppData extends InheritedWidget {
-  const MyAppData({super.key, required super.child});
+  MyAppData({super.key, required super.child});
+  final cache = CacheManager(Config("cache",stalePeriod: const Duration(hours: 1)));
+
+  final String host = "http://192.168.88.137:5000";
+
+  Future<File> getFile() async {
+    return await cache.getSingleFile(host);
+  }
 
   /* 
   this is the main container for future variables like session keys, cache managers...
