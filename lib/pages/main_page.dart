@@ -55,7 +55,10 @@ class _MainPageState extends State<MainPage> {
                       NavigationRailDestination(
                           icon: Icon(Icons.home), label: Text("Home")),
                       NavigationRailDestination(
-                          icon: Icon(Icons.search), label: Text("Search")),
+                          padding:
+                              EdgeInsetsDirectional.symmetric(vertical: 25),
+                          icon: Icon(Icons.search),
+                          label: Text("Search")),
                       NavigationRailDestination(
                           icon: Icon(Icons.person), label: Text("Profile"))
                     ],

@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
                 controller: loginController,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person),
-                  labelText: "Login:",
+                  labelText: "Email:",
                   border: OutlineInputBorder(borderSide: BorderSide(width: 5)),
                 ),
               ),

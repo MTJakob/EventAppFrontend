@@ -34,18 +34,19 @@ class _EventViewState extends State<EventView> {
           return Card(
             child: ListTile(
               leading: const Icon(Icons.abc),
-              title: Text(event["Name"], ),
+              title: Text(event["Name"], softWrap: true),
               subtitle: dataId != selectedId && noneSelected
-                  ? Text(event["Date"])
+                  ? Text(event["Date"], softWrap: true)
                   : Row(
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(event["Date"]),
+                            Text(event["Date"], softWrap: true),
                             Text(
-                                '${event["Address"]["X"]}, ${event["Address"]["Y"]}'),
-                            Text(event["Organiser"])
+                                '${event["Address"]["X"]}, ${event["Address"]["Y"]}',
+                                softWrap: true),
+                            Text(event["Organiser"], softWrap: true)
                           ],
                         ),
                         const Spacer(),
@@ -53,12 +54,12 @@ class _EventViewState extends State<EventView> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              event["Price"] != null
-                                  ? '${event["Price"]}\$'
-                                  : "Free",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                                event["Price"] != null
+                                    ? '${event["Price"]}\$'
+                                    : "Free",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                                softWrap: true),
                             IconButton(
                               icon: const Icon(Icons.favorite),
                               color:

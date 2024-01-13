@@ -40,9 +40,9 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     double aspectRatio = MediaQuery.of(context).size.aspectRatio;
 
-    List<Widget> content = const [
-      Expanded(flex: 2, child: EventView()),
-      Expanded(flex: 1, child: EventMap())
+    List<Widget> content = [
+      const Expanded(flex: 2, child: EventView()),
+      Expanded(flex: aspectRatio < 1 ? 1 : 3, child: const EventMap())
     ];
 
     return FutureBuilder(
