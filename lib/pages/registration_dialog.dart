@@ -94,7 +94,7 @@ class RegistrationDialog extends StatelessWidget {
                   },
                   controller: dateController,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.calendar_today),
+                      prefixIcon: Icon(Icons.cake),
                       labelText: "Birthday"),
                   readOnly: true,
                   onTap: () async {
