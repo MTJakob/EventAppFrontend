@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 class EventView extends StatefulWidget {
-  const EventView({super.key});
+  const EventView({super.key, this.clip = Clip.none});
+  final Clip clip;
 
   @override
   State<EventView> createState() => _EventViewState();
@@ -11,6 +12,7 @@ class EventView extends StatefulWidget {
 
 class _EventViewState extends State<EventView> {
   String? selectedId;
+  bool noneSelected = true;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +20,12 @@ class _EventViewState extends State<EventView> {
 
     if (EventsData.of(context).selected != null) {
       selectedId = EventsData.of(context).selected!();
+    } else {
+      noneSelected = false;
     }
 
     return ListView.builder(
-        clipBehavior: Clip.none,
+        clipBehavior: widget.clip,
         itemCount: eventsData.length,
         itemBuilder: (_, index) {
           String dataId = eventsData.keys.elementAt(index);
@@ -30,8 +34,8 @@ class _EventViewState extends State<EventView> {
           return Card(
             child: ListTile(
               leading: const Icon(Icons.abc),
-              title: Text(event["Name"]),
-              subtitle: dataId != selectedId
+              title: Text(event["Name"], ),
+              subtitle: dataId != selectedId && noneSelected
                   ? Text(event["Date"])
                   : Row(
                       children: [

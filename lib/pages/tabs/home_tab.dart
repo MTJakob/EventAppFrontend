@@ -39,25 +39,27 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-          future: MyAppData.of(context).getFile(),
-          builder: (context, AsyncSnapshot<File> snapshot) {
-            if (snapshot.hasData) {
-              return EventsData(
-                mapControl: controller,
-                snapshotData: snapshot.data,
-                eventData: json.decode(snapshot.data!.readAsStringSync()),
-                selected: selected,
-                selector: selector,
-                child: const Column(
-                  children: [
-                    Expanded(flex: 2, child: EventView()),
-                    Expanded(flex: 1, child: EventMap())
-                  ],
-                ),
-              );
-            } else {
-              return const Align (alignment: Alignment.topCenter,child: LinearProgressIndicator());
-            }
-          });
+        future: MyAppData.of(context).getFile(),
+        builder: (context, AsyncSnapshot<File> snapshot) {
+          if (snapshot.hasData && !snapshot.hasError) {
+            return EventsData(
+              mapControl: controller,
+              snapshotData: snapshot.data,
+              eventData: json.decode(snapshot.data!.readAsStringSync()),
+              selected: selected,
+              selector: selector,
+              child: const Column(
+                children: [
+                  Expanded(flex: 2, child: EventView()),
+                  Expanded(flex: 1, child: EventMap())
+                ],
+              ),
+            );
+          } else {
+            return const Align(
+                alignment: Alignment.topCenter,
+                child: LinearProgressIndicator());
+          }
+        });
   }
 }
