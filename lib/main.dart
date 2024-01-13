@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyAppData(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Event Manager',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),

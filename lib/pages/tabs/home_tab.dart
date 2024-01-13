@@ -38,23 +38,30 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    double aspectRatio = MediaQuery.of(context).size.aspectRatio;
+
+    List<Widget> content = const [
+      Expanded(flex: 2, child: EventView()),
+      Expanded(flex: 1, child: EventMap())
+    ];
+
     return FutureBuilder(
         future: MyAppData.of(context).getFile(),
         builder: (context, AsyncSnapshot<File> snapshot) {
           if (snapshot.hasData && !snapshot.hasError) {
             return EventsData(
-              mapControl: controller,
-              snapshotData: snapshot.data,
-              eventData: json.decode(snapshot.data!.readAsStringSync()),
-              selected: selected,
-              selector: selector,
-              child: const Column(
-                children: [
-                  Expanded(flex: 2, child: EventView()),
-                  Expanded(flex: 1, child: EventMap())
-                ],
-              ),
-            );
+                mapControl: controller,
+                snapshotData: snapshot.data,
+                eventData: json.decode(snapshot.data!.readAsStringSync()),
+                selected: selected,
+                selector: selector,
+                child: aspectRatio > 1
+                    ? Row(
+                        children: content,
+                      )
+                    : Column(
+                        children: content,
+                      ));
           } else {
             return const Align(
                 alignment: Alignment.topCenter,

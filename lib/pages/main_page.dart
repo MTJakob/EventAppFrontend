@@ -17,28 +17,67 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(initialPage: currentPageIndex);
+    double aspectRatio = MediaQuery.of(context).size.aspectRatio;
+
+    destinationSelect(int index) {
+      setState(() {
+        currentPageIndex = index;
+      });
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const TitleText(),
         ),
-        bottomNavigationBar: NavigationBar(
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-            NavigationDestination(icon: Icon(Icons.search), label: "Search"),
-            NavigationDestination(icon: Icon(Icons.person), label: "Profile")
-          ],
-          selectedIndex: currentPageIndex,
-          onDestinationSelected: (int index) {
-            controller.jumpToPage(index);
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-        ),
+        bottomNavigationBar: aspectRatio > 1
+            ? null
+            : NavigationBar(
+                destinations: const [
+                  NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+                  NavigationDestination(
+                      icon: Icon(Icons.search), label: "Search"),
+                  NavigationDestination(
+                      icon: Icon(Icons.person), label: "Profile")
+                ],
+                selectedIndex: currentPageIndex,
+                onDestinationSelected: (int index) {
+                  controller.jumpToPage(index);
+                  destinationSelect(index);
+                },
+              ),
         body: SafeArea(
-            child: PageView(
-          controller: controller,
-          children: const [HomeTab(), SearchTab(), ProfileTab()],
+            child: Row(
+          children: [
+            aspectRatio > 1
+                ? NavigationRail(
+                    labelType: NavigationRailLabelType.all,
+                    destinations: const [
+                      NavigationRailDestination(
+                          icon: Icon(Icons.home), label: Text("Home")),
+                      NavigationRailDestination(
+                          icon: Icon(Icons.search), label: Text("Search")),
+                      NavigationRailDestination(
+                          icon: Icon(Icons.person), label: Text("Profile"))
+                    ],
+                    selectedIndex: currentPageIndex,
+                    onDestinationSelected: (int index) {
+                      controller.jumpToPage(index);
+                      destinationSelect(index);
+                    },
+                  )
+                : const SizedBox.shrink(),
+            Expanded(
+              child: PageView(
+                onPageChanged: (int newIndex) {
+                  currentPageIndex != newIndex
+                      ? destinationSelect(newIndex)
+                      : null;
+                },
+                controller: controller,
+                children: const [HomeTab(), SearchTab(), ProfileTab()],
+              ),
+            ),
+          ],
         )));
   }
 }
