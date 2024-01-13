@@ -43,7 +43,7 @@ class EventMap extends StatelessWidget {
                           Marker(
                               alignment: const Alignment(0, -0.7),
                               point: LatLng(
-                                  value["Adress"]["x"], value["Adress"]["y"]),
+                                  value["Address"]["X"], value["Address"]["Y"]),
                               child: IconButton(
                                   iconSize: 30,
                                   padding: const EdgeInsetsDirectional.all(0),
@@ -56,8 +56,8 @@ class EventMap extends StatelessWidget {
                                   onPressed: () =>
                                       EventsData.of(context).selector!(
                                           eventId,
-                                          LatLng(data[eventId]["Adress"]["x"],
-                                              data[eventId]["Adress"]["y"]))))))
+                                          LatLng(data[eventId]["Address"]["X"],
+                                              data[eventId]["Address"]["Y"]))))))
                       .values
                       .toList()),
               Container(

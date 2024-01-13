@@ -40,7 +40,7 @@ class _EventViewState extends State<EventView> {
                           children: [
                             Text(event["Date"]),
                             Text(
-                                '${event["Adress"]["x"]}, ${event["Adress"]["y"]}'),
+                                '${event["Address"]["X"]}, ${event["Address"]["Y"]}'),
                             Text(event["Organiser"])
                           ],
                         ),
@@ -49,7 +49,9 @@ class _EventViewState extends State<EventView> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${event["Price"]}\$',
+                              event["Price"] != null
+                                  ? '${event["Price"]}\$'
+                                  : "Free",
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -70,7 +72,7 @@ class _EventViewState extends State<EventView> {
                       ],
                     ),
               onTap: () => EventsData.of(context).selector!(
-                  dataId, LatLng(event["Adress"]["x"], event["Adress"]["y"])),
+                  dataId, LatLng(event["Address"]["X"], event["Address"]["Y"])),
             ),
           );
         });
