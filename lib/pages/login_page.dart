@@ -1,4 +1,5 @@
 import 'package:event_flutter_application/pages/registration_dialog.dart';
+import 'package:event_flutter_application/title.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -22,10 +23,10 @@ class LoginPage extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             children: [
-              const Text(
-                "Event Manager",
-                textAlign: TextAlign.center,
-                textScaler: TextScaler.linear(2),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsetsDirectional.only(bottom: 10),
+                child: const TitleText(),
               ),
               TextFormField(
                 controller: loginController,

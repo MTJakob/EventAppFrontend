@@ -38,8 +38,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
+    return FutureBuilder(
           future: MyAppData.of(context).getFile(),
           builder: (context, AsyncSnapshot<File> snapshot) {
             if (snapshot.hasData) {
@@ -57,9 +56,8 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               );
             } else {
-              return const LinearProgressIndicator();
+              return const Align (alignment: Alignment.topCenter,child: LinearProgressIndicator());
             }
-          }),
-    );
+          });
   }
 }

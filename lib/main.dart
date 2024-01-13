@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
           useMaterial3: true,
         ),
-        darkTheme: ThemeData.dark(),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.amber.shade900, brightness: Brightness.dark),
+          useMaterial3: true,
+        ),
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginPage(),
