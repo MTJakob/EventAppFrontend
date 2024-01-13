@@ -28,9 +28,9 @@ class _MainPageState extends State<MainPage> {
           ],
           selectedIndex: currentPageIndex,
           onDestinationSelected: (int index) {
+            controller.jumpToPage(index);
             setState(() {
               currentPageIndex = index;
-              controller.jumpToPage(index);
             });
           },
         ),
