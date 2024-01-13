@@ -1,4 +1,4 @@
-import 'package:event_flutter_application/registration_dialog.dart';
+import 'package:event_flutter_application/pages/registration_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {

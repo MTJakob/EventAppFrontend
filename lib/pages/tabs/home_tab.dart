@@ -1,7 +1,7 @@
 import 'package:event_flutter_application/data_widget.dart';
-import 'package:event_flutter_application/event_map.dart';
-import 'package:event_flutter_application/event_view.dart';
-import 'package:event_flutter_application/events_data.dart';
+import 'package:event_flutter_application/events/event_map.dart';
+import 'package:event_flutter_application/events/event_view.dart';
+import 'package:event_flutter_application/events/events_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'dart:convert';

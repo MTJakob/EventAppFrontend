@@ -4,7 +4,8 @@ import 'package:flutter_cache_manager/file.dart';
 
 class MyAppData extends InheritedWidget {
   MyAppData({super.key, required super.child});
-  final cache = CacheManager(Config("cache",stalePeriod: const Duration(hours: 1)));
+  final cache =
+      CacheManager(Config("cache", stalePeriod: const Duration(hours: 1)));
 
   final String host = "http://192.168.88.137:5000";
 
