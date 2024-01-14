@@ -29,7 +29,7 @@ class PasswordDialog extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             children: [
               PasswordField(controller: oldPwd, hintText: "Old Password",),
-              PasswordField(controller: newPwd, hintText: "New Password"),
+              PasswordField(controller: newPwd, hintText: "New Password",showPolicy: true,),
               PasswordField(controller: repeatPwd, hintText: "Repeat Password", firstField: newPwd,)
             ],
           ),

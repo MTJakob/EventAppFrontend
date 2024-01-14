@@ -41,7 +41,7 @@ class RegistrationDialog extends StatelessWidget {
               NameField(controller: nameController),
               NameField(controller: surnameController, hintText: "Surname"),
               EmailField(controller: emailController),
-              PasswordField(controller: passwordController),
+              PasswordField(controller: passwordController, showPolicy: true,),
               BirthdayField(controller: dateController)
             ],
           ),
