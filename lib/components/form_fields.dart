@@ -7,10 +7,12 @@ class NameField extends StatelessWidget {
       {super.key,
       required this.controller,
       this.hintText = "Name",
-      this.isLocked = false});
+      this.isLocked = false,
+      this.icon = Icons.person});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class NameField extends StatelessWidget {
       textCapitalization: TextCapitalization.words,
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.person), hintText: hintText),
+          prefixIcon: Icon(icon), hintText: hintText),
     );
   }
 }

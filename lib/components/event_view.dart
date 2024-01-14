@@ -1,4 +1,5 @@
 import 'package:event_flutter_application/components/events_data.dart';
+import 'package:event_flutter_application/pages/dialogs/mange_event_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -33,7 +34,8 @@ class _EventViewState extends State<EventView> {
 
           return Card(
             child: ListTile(
-              leading: Icon(EventsData.eventIcons[event["Category"]] ?? Icons.event),
+              leading:
+                  Icon(EventsData.eventIcons[event["Category"]] ?? Icons.event),
               title: Text(event["Name"], softWrap: true),
               subtitle: dataId != selectedId && noneSelected
                   ? Text(event["Date"], softWrap: true)
@@ -60,18 +62,30 @@ class _EventViewState extends State<EventView> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                                 softWrap: true),
-                            IconButton(
-                              icon: const Icon(Icons.favorite),
-                              color:
-                                  true // later a reference to events liked by the user
-                                      ? Colors.red
-                                      : Theme.of(context).disabledColor,
-                              onPressed: () {
-                                setState(() {
-                                  // later adds / removes the event from liked
-                                });
-                              },
-                            ),
+                            // is admin
+                            true
+                                ? IconButton(
+                                    onPressed: () => showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (_) =>
+                                            const ManageEventDialog()),
+                                    icon: const Icon(
+                                      Icons.settings,
+                                      color: Colors.grey,
+                                    ))
+                                : IconButton(
+                                    icon: const Icon(Icons.favorite),
+                                    color:
+                                        true // later a reference to events liked by the user
+                                            ? Colors.red
+                                            : Theme.of(context).disabledColor,
+                                    onPressed: () {
+                                      setState(() {
+                                        // later adds / removes the event from liked
+                                      });
+                                    },
+                                  ),
                           ],
                         )
                       ],
