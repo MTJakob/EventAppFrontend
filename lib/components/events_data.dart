@@ -22,59 +22,78 @@ class EventsData extends InheritedWidget {
   final Function? selector;
 
   static Map<String, IconData> eventIcons = {
-    "Music": Icons.music_note,
-    "Food": Icons.fastfood,
-    "Outdoor": Icons.forest,
-    "Sailing": Icons.sailing,
+    //general sports
+    "Sport": Icons.sports,
     "Match": Icons.stadium,
-    "Party": Icons.nightlife,
-    "Fair": Icons.attractions,
-    "Movie": Icons.local_movies,
-    "Theatre": Icons.theater_comedy,
-    "Esport": Icons.sports_esports,
+    "Motorsports": Icons.sports_motorsports,
+    //team sports
     "Soccer":Icons.sports_soccer,
-    "Science": Icons.science,
-    "Birthday": Icons.cake,
     "Tennis": Icons.sports_tennis,
-    "Grill": Icons.outdoor_grill,
     "Baseball": Icons.sports_baseball,
     "Volleyball":Icons.sports_volleyball,
     "Football": Icons.sports_football,
     "Handball": Icons.sports_handball,
-    "Sport": Icons.sports,
-    "Kayaking": Icons.kayaking,
-    "Motorsports": Icons.sports_motorsports,
+    //casual sports
+    "Cycling": Icons.pedal_bike,
+    "Running": Icons.directions_run,
+    "Golf": Icons.golf_course,
+    "Fishing": Icons.phishing,
     "IceSkating": Icons.ice_skating,
+    //water sports
     "Diving": Icons.scuba_diving,
-    "Networking": Icons.groups,
-    "Tournament": Icons.emoji_events,
-    "Workshop": Icons.construction,
-    "Psychology": Icons.psychology,
-    "Robots": Icons.precision_manufacturing,
+    "Sailing": Icons.sailing,
+    "Kayaking": Icons.kayaking,
+    "Swimming": Icons.pool,
+    "Surfing": Icons.surfing,
+    //outdoor
+    "Outdoor": Icons.forest,
     "Campfire": Icons.local_fire_department,
     "Camping": Icons.details,
-    "Market": Icons.storefront,
-    "Swimming": Icons.pool,
-    "Beach": Icons.beach_access,
-    "Gambling": Icons.casino,
-    "Golf": Icons.golf_course,
-    "Event": Icons.celebration,
-    "Cycling": Icons.pedal_bike,
     "Hiking": Icons.terrain,
-    "Premium": Icons.diamond,
+    //art
     "Art": Icons.palette,
     "Photography": Icons.camera,
-    "Standup": Icons.mic,
-    "Meetup": Icons.handshake,
+    "Movie": Icons.local_movies,
+    "Theatre": Icons.theater_comedy,
+    //music
+    "Music": Icons.music_note,
+    "Party": Icons.nightlife,
+    //food
+    "Food": Icons.fastfood,
     "Baking": Icons.cookie,
+    //self improvement
+    "Networking": Icons.groups,
+    "Workshop": Icons.construction,
+    "Psychology": Icons.psychology,
     "Seminary" :Icons.psychology_alt,
     "Lecture": Icons.school,
-    "Animals": Icons.pets,
-    "Computers": Icons.computer,
-    "Fishing": Icons.phishing,
+    //gathering
+    "Birthday": Icons.cake,
+    "Grill": Icons.outdoor_grill,
+    "Event": Icons.celebration,
+    "Meetup": Icons.handshake,
+    //fair
+    "Fair": Icons.attractions,
+    "Science": Icons.science,
+    "Market": Icons.storefront,
+    "Circus": Icons.festival_outlined,
+    //hobbies
     "Books": Icons.auto_stories,
-    "Cruise": Icons.directions_boat,
+    //computers
+    "Computers": Icons.computer,
+    "Esport": Icons.sports_esports,
+    //leisure
+    "Beach": Icons.beach_access,
+    "Cruise": Icons.anchor,
+    "Standup": Icons.mic,
+    //general
+    "Tournament": Icons.emoji_events,
+    "Premium": Icons.diamond,
     "Protest": Icons.priority_high,
+    //misc
+    "Robots": Icons.precision_manufacturing,
+    "Gambling": Icons.casino,
+    "Animals": Icons.pets,
   };
 
   @override
