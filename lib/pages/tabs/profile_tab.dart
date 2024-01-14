@@ -32,6 +32,12 @@ class _ProfileTabState extends State<ProfileTab> {
       });
     }
 
+    void lockToggle() {
+      setState(() {
+        isLocked = !isLocked;
+      });
+    }
+
     controllerName.text = "Name";
     controllerSurname.text = "Surname";
     controllerEmail.text = "xyz@gmail.com";
@@ -62,42 +68,47 @@ class _ProfileTabState extends State<ProfileTab> {
                   controller: controllerBirth,
                   isLocked: isLocked,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(onPressed: logOut, child: const Text("Log Out")),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        isLocked
-                            ? const SizedBox()
-                            : IconButton(
-                                tooltip: "Cancel",
-                                onPressed: () {
-                                  controllerBirth.clear();
-                                  controllerEmail.clear();
-                                  controllerName.clear();
-                                  controllerSurname.clear();
-                                  setState(() {
-                                    isLocked = !isLocked;
-                                  });
-                                },
-                                icon: const Icon(Icons.close)),
-                        IconButton(
-                            tooltip: isLocked ? "Edit" : "Accept",
+                Wrap(
+                  spacing: 20,
+                  alignment: WrapAlignment.spaceBetween,
+                  children: isLocked
+                      ? [
+                          ActionChip(
+                              label: const Text("Change password"),
+                              avatar: const Icon(Icons.password),
+                              onPressed: () {}),
+                          ActionChip(
+                            label: const Text("Edit"),
+                            avatar: const Icon(Icons.border_color),
+                            onPressed: lockToggle,
+                          ),
+                          ActionChip(
+                              label: const Text("Log out"),
+                              avatar: const Icon(Icons.logout),
+                              onPressed: logOut),
+                        ]
+                      : [
+                          ActionChip(
+                            label: const Text("Cancel"),
+                            avatar: const Icon(Icons.close),
                             onPressed: () {
-                              if (formKey.currentState!.validate() ||
-                                  isLocked) {
-                                setState(() {
-                                  isLocked = !isLocked;
-                                });
+                              controllerBirth.clear();
+                              controllerEmail.clear();
+                              controllerName.clear();
+                              controllerSurname.clear();
+                              lockToggle();
+                            },
+                          ),
+                          ActionChip(
+                            label: const Text("Accept"),
+                            avatar: const Icon(Icons.check),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                lockToggle();
                               }
                             },
-                            icon: Icon(
-                                isLocked ? Icons.border_color : Icons.check)),
-                      ],
-                    ),
-                  ],
+                          ),
+                        ],
                 )
               ],
             ),
