@@ -4,10 +4,7 @@ import 'package:validators/validators.dart';
 
 class NameField extends StatelessWidget {
   const NameField(
-      {super.key,
-      required this.controller,
-      this.hintText = "Name",
-      this.isLocked = false});
+      {super.key, required this.controller, this.hintText = "Name", this.isLocked=false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
@@ -34,10 +31,7 @@ class NameField extends StatelessWidget {
 
 class EmailField extends StatelessWidget {
   const EmailField(
-      {super.key,
-      required this.controller,
-      this.hintText = "Email",
-      this.isLocked = false});
+      {super.key, required this.controller, this.hintText = "Email", this.isLocked=false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
@@ -60,10 +54,7 @@ class EmailField extends StatelessWidget {
 
 class PasswordField extends StatelessWidget {
   const PasswordField(
-      {super.key,
-      required this.controller,
-      this.hintText = "Password",
-      this.isLocked = false});
+      {super.key, required this.controller, this.hintText = "Password", this.isLocked=false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
@@ -83,10 +74,7 @@ class PasswordField extends StatelessWidget {
 
 class BirthdayField extends StatelessWidget {
   const BirthdayField(
-      {super.key,
-      required this.controller,
-      this.hintText = "Birthday",
-      this.isLocked = false});
+      {super.key, required this.controller, this.hintText = "Birthday", this.isLocked=false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
@@ -101,20 +89,19 @@ class BirthdayField extends StatelessWidget {
         decoration: InputDecoration(
             prefixIcon: const Icon(Icons.cake), hintText: hintText),
         readOnly: true,
-        onTap: () async {
-          if (!isLocked) {
-            DateTime? picked = await showDatePicker(
-                helpText: "Select your birthday",
-                initialDatePickerMode: DatePickerMode.year,
-                initialEntryMode: DatePickerEntryMode.calendarOnly,
-                context: context,
-                firstDate: DateTime(1900),
-                lastDate:
-                    DateTime.now().subtract(const Duration(days: 365 * 13)));
-            if (picked != null) {
-              controller.text = picked.toString().split(' ').first;
-            }
-          }
+        onTap: () async {if (!isLocked) {
+                    DateTime? picked = await showDatePicker(
+                        helpText: "Select your birthday",
+                        initialDatePickerMode: DatePickerMode.year,
+                        initialEntryMode: DatePickerEntryMode.calendarOnly,
+                        context: context,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now()
+                            .subtract(const Duration(days: 365 * 13)));
+                    if (picked != null) {
+                      controller.text = picked.toString().split(' ').first;
+                    }
+                  }
         });
   }
 }
