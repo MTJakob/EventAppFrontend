@@ -82,7 +82,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                   builder: (context) => const PasswordDialog(),
                                   barrierDismissible: false)),
                           ActionChip(
-                            label: const Text("Edit"),
+                            label: const Text("Edit profile"),
                             avatar: const Icon(Icons.border_color),
                             onPressed: lockToggle,
                           ),
