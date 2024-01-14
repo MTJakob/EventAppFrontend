@@ -57,6 +57,7 @@ class _HomeTabState extends State<HomeTab> {
                 selector: selector,
                 child: aspectRatio > 1
                     ? Row(
+                      textDirection: TextDirection.rtl,
                         children: content,
                       )
                     : Column(
