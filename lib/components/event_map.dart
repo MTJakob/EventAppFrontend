@@ -1,4 +1,4 @@
-import 'package:event_flutter_application/events/events_data.dart';
+import 'package:event_flutter_application/components/events_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -53,11 +53,11 @@ class EventMap extends StatelessWidget {
                                         ? Colors.red
                                         : Theme.of(context).primaryColor,
                                   ),
-                                  onPressed: () =>
-                                      EventsData.of(context).selector!(
-                                          eventId,
-                                          LatLng(data[eventId]["Address"]["X"],
-                                              data[eventId]["Address"]["Y"]))))))
+                                  onPressed: () => EventsData.of(context)
+                                          .selector!(
+                                      eventId,
+                                      LatLng(data[eventId]["Address"]["X"],
+                                          data[eventId]["Address"]["Y"]))))))
                       .values
                       .toList()),
               Container(

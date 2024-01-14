@@ -1,8 +1,8 @@
-import 'package:event_flutter_application/events/event_view.dart';
-import 'package:event_flutter_application/pages/form_fields.dart';
+import 'package:event_flutter_application/components/event_view.dart';
+import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:event_flutter_application/data_widget.dart';
-import 'package:event_flutter_application/events/events_data.dart';
+import 'package:event_flutter_application/components/data_widget.dart';
+import 'package:event_flutter_application/components/events_data.dart';
 import 'dart:convert';
 import 'package:flutter_cache_manager/file.dart';
 

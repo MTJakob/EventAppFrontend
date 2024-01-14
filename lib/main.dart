@@ -1,7 +1,7 @@
 import 'package:event_flutter_application/pages/login_page.dart';
 import 'package:event_flutter_application/pages/main_page.dart';
 import 'package:flutter/material.dart';
-import 'data_widget.dart';
+import 'components/data_widget.dart';
 
 void main() {
   runApp(const MyApp());

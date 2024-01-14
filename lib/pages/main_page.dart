@@ -1,7 +1,7 @@
 import 'package:event_flutter_application/pages/tabs/home_tab.dart';
 import 'package:event_flutter_application/pages/tabs/profile_tab.dart';
 import 'package:event_flutter_application/pages/tabs/search_tab.dart';
-import 'package:event_flutter_application/title.dart';
+import 'package:event_flutter_application/components/title.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:event_flutter_application/events/events_data.dart';
+import 'package:event_flutter_application/components/events_data.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 

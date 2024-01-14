@@ -1,4 +1,4 @@
-import 'package:event_flutter_application/pages/form_fields.dart';
+import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationDialog extends StatelessWidget {
