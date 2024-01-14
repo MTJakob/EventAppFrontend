@@ -33,7 +33,7 @@ class _EventViewState extends State<EventView> {
 
           return Card(
             child: ListTile(
-              leading: const Icon(Icons.abc),
+              leading: Icon(EventsData.eventIcons[event["Category"]] ?? Icons.event),
               title: Text(event["Name"], softWrap: true),
               subtitle: dataId != selectedId && noneSelected
                   ? Text(event["Date"], softWrap: true)

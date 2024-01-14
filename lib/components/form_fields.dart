@@ -101,6 +101,7 @@ class PasswordField extends StatelessWidget {
         } else if (current.length < 8 || current.length > 20) {
           return "Has to be 8-20 characters";
         }
+        return null;
       },
       textInputAction: TextInputAction.next,
       obscureText: true,
