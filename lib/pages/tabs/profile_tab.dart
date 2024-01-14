@@ -1,5 +1,6 @@
 import 'package:event_flutter_application/components/event_view.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
+import 'package:event_flutter_application/pages/dialogs/password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/data_widget.dart';
 import 'package:event_flutter_application/components/events_data.dart';
@@ -76,7 +77,10 @@ class _ProfileTabState extends State<ProfileTab> {
                           ActionChip(
                               label: const Text("Change password"),
                               avatar: const Icon(Icons.password),
-                              onPressed: () {}),
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (context) => const PasswordDialog(),
+                                  barrierDismissible: false)),
                           ActionChip(
                             label: const Text("Edit"),
                             avatar: const Icon(Icons.border_color),

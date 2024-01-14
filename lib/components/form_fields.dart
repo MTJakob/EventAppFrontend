@@ -63,16 +63,20 @@ class PasswordField extends StatelessWidget {
       {super.key,
       required this.controller,
       this.hintText = "Password",
-      this.isLocked = false});
+      this.isLocked = false, this.firstField});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
+  final TextEditingController? firstField;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       readOnly: isLocked,
+      validator: firstField == null? null:(current) {
+        return current == firstField!.text ? null : "Passwords do not match";
+      },
       textInputAction: TextInputAction.next,
       obscureText: true,
       decoration: InputDecoration(
