@@ -1,4 +1,5 @@
 import 'package:event_flutter_application/events/event_view.dart';
+import 'package:event_flutter_application/pages/form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/data_widget.dart';
 import 'package:event_flutter_application/events/events_data.dart';
@@ -29,8 +30,6 @@ class _ProfileTabState extends State<ProfileTab> {
       });
     }
 
-    TextStyle style = const TextStyle(fontSize: 20);
-
     Widget card = Card(
       child: Padding(
         padding: const EdgeInsets.all(30),
@@ -38,61 +37,19 @@ class _ProfileTabState extends State<ProfileTab> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                textCapitalization: TextCapitalization.words,
-                style: style,
-                controller: controllerName,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.name,
-                maxLength: isLocked ? null : 16,
-                decoration: const InputDecoration(
-                  hintText: "Name",
-                  prefixIcon: Icon(Icons.person),
-                ),
-                readOnly: isLocked,
-              ),
-              TextField(
-                textCapitalization: TextCapitalization.words,
-                style: style,
+              NameField(controller: controllerName, isLocked: isLocked),
+              NameField(
                 controller: controllerSurname,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.name,
-                maxLength: isLocked ? null : 16,
-                decoration: const InputDecoration(
-                    hintText: "Surame", prefixIcon: Icon(Icons.person)),
-                readOnly: isLocked,
+                isLocked: isLocked,
+                hintText: "Surname",
               ),
-              TextField(
-                style: style,
+              EmailField(
                 controller: controllerEmail,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                    hintText: "Email", prefixIcon: Icon(Icons.mail)),
-                readOnly: isLocked,
+                isLocked: isLocked,
               ),
-              TextField(
-                style: style,
+              BirthdayField(
                 controller: controllerBirth,
-                textInputAction: TextInputAction.next,
-                decoration: const InputDecoration(
-                    hintText: "Birthday", prefixIcon: Icon(Icons.cake)),
-                readOnly: true,
-                onTap: () async{
-                  if (!isLocked) {
-                    DateTime? picked = await showDatePicker(
-                        helpText: "Select your birthday",
-                        initialDatePickerMode: DatePickerMode.year,
-                        initialEntryMode: DatePickerEntryMode.calendarOnly,
-                        context: context,
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now()
-                            .subtract(const Duration(days: 365 * 13)));
-                    if (picked != null) {
-                      controllerBirth.text = picked.toString().split(' ').first;
-                    }
-                  }
-                },
+                isLocked: isLocked,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
