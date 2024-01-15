@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
+import 'package:event_flutter_application/components/events_data.dart';
 
 class NameField extends StatelessWidget {
   const NameField(
@@ -151,5 +152,51 @@ class BirthdayField extends StatelessWidget {
             }
           }
         });
+  }
+}
+
+class CategoryPick extends StatefulWidget {
+  const CategoryPick({super.key, required this.controller});
+  final TextEditingController controller;
+
+  @override
+  State<CategoryPick> createState() => _CategoryPickState();
+}
+
+class _CategoryPickState extends State<CategoryPick> {
+  void onPressed() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: const Text("Pick event category"),
+              content: SingleChildScrollView(
+                child: Wrap(
+                    spacing: 10,
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: EventsData.eventIcons.entries.map((entry) {
+                      return ActionChip(
+                        label: Text(entry.key),
+                        avatar: Icon(entry.value),
+                        onPressed: () {
+                          setState(() {
+                            widget.controller.text = entry.key;
+                          });
+                          Navigator.pop(context);
+                        },
+                      );
+                    }).toList()),
+              ));
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.controller.text == ""
+        ? OutlinedButton(
+            onPressed: onPressed, child: const Text("Choose category"))
+        : TextButton.icon(
+          icon: Icon(EventsData.eventIcons[widget.controller.text]),
+            onPressed: onPressed, label: Text(widget.controller.text));
   }
 }

@@ -10,15 +10,11 @@ class EventView extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, dynamic> eventsData = EventsData.of(context).eventData;
 
-    return ListView.builder(
+    return AnimatedList(
         clipBehavior: clip,
-        itemCount: eventsData.length,
-        itemBuilder: (_, index) {
+        initialItemCount: eventsData.length,
+        itemBuilder: (_, index, animation) {
           String eventId = eventsData.keys.elementAt(index);
-          Map<String, dynamic>? event = eventsData[eventId];
-          if (event == null){
-            return null;
-          }
           return EventCard(eventId:eventId);
         });
   }
