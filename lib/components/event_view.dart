@@ -1,5 +1,5 @@
 import 'package:event_flutter_application/components/events_data.dart';
-import 'package:event_flutter_application/pages/dialogs/mange_event_dialog.dart';
+import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -65,11 +65,7 @@ class _EventViewState extends State<EventView> {
                             // is admin
                             true
                                 ? IconButton(
-                                    onPressed: () => showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (_) =>
-                                            const ManageEventDialog()),
+                                    onPressed: () => Navigator.pushNamed(context, '/manage'),
                                     icon: const Icon(
                                       Icons.settings,
                                       color: Colors.grey,
