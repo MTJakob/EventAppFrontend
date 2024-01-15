@@ -41,7 +41,9 @@ class _MainPageState extends State<MainPage> {
                 ],
                 selectedIndex: currentPageIndex,
                 onDestinationSelected: (int index) {
-                  controller.jumpToPage(index);
+                  controller.animateToPage(index,
+                      duration: Durations.extralong4,
+                      curve: Curves.fastEaseInToSlowEaseOut);
                   destinationSelect(index);
                 },
               ),
@@ -64,7 +66,9 @@ class _MainPageState extends State<MainPage> {
                     ],
                     selectedIndex: currentPageIndex,
                     onDestinationSelected: (int index) {
-                      controller.jumpToPage(index);
+                      controller.animateToPage(index,
+                          duration: Durations.extralong4,
+                          curve: Curves.fastEaseInToSlowEaseOut);
                       destinationSelect(index);
                     },
                   )

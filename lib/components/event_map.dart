@@ -1,21 +1,27 @@
 import 'package:event_flutter_application/components/events_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 
-class EventMap extends StatelessWidget {
+class EventMap extends StatefulWidget {
   const EventMap({super.key});
 
   static LatLng centralPoint = const LatLng(38.1858, 15.5561);
 
+  @override
+  State<EventMap> createState() => _EventMapState();
+}
+
+class _EventMapState extends State<EventMap>  with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> data = EventsData.of(context).eventData;
 
     String? selectedId;
 
-    MapController controller =
-        EventsData.of(context).mapControl ?? MapController();
+    AnimatedMapController animatedController =
+        EventsData.of(context).mapControl ?? AnimatedMapController(vsync: this);
 
     if (EventsData.of(context).selected != null) {
       selectedId = EventsData.of(context).selected!();
@@ -27,9 +33,9 @@ class EventMap extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         elevation: 10,
         child: FlutterMap(
-            mapController: controller,
+            mapController: animatedController.mapController,
             options: MapOptions(
-                keepAlive: true, initialCenter: centralPoint, initialZoom: 16),
+                keepAlive: true, initialCenter: EventMap.centralPoint, initialZoom: 16),
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -49,7 +55,8 @@ class EventMap extends StatelessWidget {
                                   padding: const EdgeInsetsDirectional.all(0),
                                   icon: Icon(
                                     Icons.place,
-                                    color: selectedId == eventId
+                                    color: 
+                                    selectedId == eventId
                                         ? Colors.red
                                         : Theme.of(context).primaryColor,
                                   ),
@@ -63,7 +70,7 @@ class EventMap extends StatelessWidget {
               Container(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    onPressed: () => controller.rotate(0),
+                    onPressed: () => animatedController.animatedRotateReset(),
                     icon: const Icon(Icons.navigation_rounded),
                     color: Theme.of(context).primaryColor,
                   ))

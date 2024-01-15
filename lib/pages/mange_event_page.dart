@@ -33,31 +33,34 @@ class _ManageEventPageState extends State<ManageEventPage> {
       appBar: AppBar(title: const TitleText(), actions: [IconButton(onPressed: submit, icon: const Icon(Icons.check))],),
       body: Card(
         margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        child: Form(
-          key: formKey,
-          child: SizedBox(
-            width: double.maxFinite,
-            child: ListView(
-              shrinkWrap: true,
-              clipBehavior: Clip.antiAlias,
-              children: [
-                //name, time, duration, capacity, price, address, category
-                NameField(
-                  controller: nameController,
-                  hintText: "Name",
-                  icon: Icons.abc,
-                ),
-                DateTimePicker(
-                  type: DateTimePickerType.dateTimeSeparate,
-                  controller: dateController,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 365)),
-                  initialEntryMode: DatePickerEntryMode.calendarOnly,
-                  icon: const Icon(Icons.event_note),
-                  dateHintText: "Date",
-                  timeHintText: "Time",
-                ),
-              ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+          child: Form(
+            key: formKey,
+            child: SizedBox(
+              width: double.maxFinite,
+              child: ListView(
+                shrinkWrap: true,
+                clipBehavior: Clip.antiAlias,
+                children: [
+                  //name, time, duration, capacity, price, address, category
+                  NameField(
+                    controller: nameController,
+                    hintText: "Name",
+                    icon: Icons.abc,
+                  ),
+                  DateTimePicker(
+                    type: DateTimePickerType.dateTimeSeparate,
+                    controller: dateController,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    icon: const Icon(Icons.event_note),
+                    dateHintText: "Date",
+                    timeHintText: "Time",
+                  ),
+                ],
+              ),
             ),
           ),
         ),

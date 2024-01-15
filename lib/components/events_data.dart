@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/file.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 
 class EventsData extends InheritedWidget {
   const EventsData(
@@ -12,7 +12,7 @@ class EventsData extends InheritedWidget {
       this.selected,
       this.selector});
 
-  final MapController? mapControl;
+  final AnimatedMapController? mapControl;
 
   final File? snapshotData;
 

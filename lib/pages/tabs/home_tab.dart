@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'dart:convert';
 import 'package:flutter_cache_manager/file.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 
 class HomeTab extends StatefulWidget {
@@ -15,12 +16,15 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   String? selectedId;
   MapController controller = MapController();
+  late final AnimatedMapController animatedController =
+      AnimatedMapController(vsync: this, mapController: controller);
 
   void selector(String id, LatLng coordinates) {
-    controller.move(coordinates, controller.camera.zoom);
+    animatedController.animateTo(
+        dest: coordinates, zoom: controller.camera.zoom);
     if (selectedId == id) {
       setState(() {
         selectedId = null;
@@ -50,7 +54,7 @@ class _HomeTabState extends State<HomeTab> {
         builder: (context, AsyncSnapshot<File> snapshot) {
           if (snapshot.hasData && !snapshot.hasError) {
             return EventsData(
-                mapControl: controller,
+                mapControl: animatedController,
                 snapshotData: snapshot.data,
                 eventData: json.decode(snapshot.data!.readAsStringSync()),
                 selected: selected,
