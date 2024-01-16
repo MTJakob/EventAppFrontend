@@ -30,7 +30,6 @@ environment:
 dependencies:
   validators: ^3.0.0
   flutter_map_animations: ^0.5.3 
-  location_picker_flutter_map: ^3.0.0
   flutter:
     sdk: flutter
 

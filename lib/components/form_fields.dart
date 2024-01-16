@@ -193,10 +193,41 @@ class _CategoryPickState extends State<CategoryPick> {
   @override
   Widget build(BuildContext context) {
     return widget.controller.text == ""
-        ? OutlinedButton(
+        ? TextButton(
             onPressed: onPressed, child: const Text("Choose category"))
         : TextButton.icon(
           icon: Icon(EventsData.eventIcons[widget.controller.text]),
             onPressed: onPressed, label: Text(widget.controller.text));
+  }
+}
+
+class NumberField extends StatelessWidget {
+  const NumberField(
+      {super.key,
+      required this.controller,
+      this.hintText,
+      this.isLocked = false,
+      this.suffix,
+      this.icon});
+  final TextEditingController controller;
+  final String? hintText;
+  final bool isLocked;
+  final String? suffix;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: controller,
+      readOnly: isLocked,
+      validator: (String? current) {
+        return isInt(current!) ? null : "Not a valid number!";
+      },
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          prefixIcon: Icon(icon), hintText: hintText, suffixText: suffix),
+    );
   }
 }
