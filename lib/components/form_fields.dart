@@ -29,8 +29,7 @@ class NameField extends StatelessWidget {
       textInputAction: TextInputAction.next,
       textCapitalization: TextCapitalization.words,
       keyboardType: TextInputType.name,
-      decoration: InputDecoration(
-          prefixIcon: Icon(icon), hintText: hintText),
+      decoration: InputDecoration(prefixIcon: Icon(icon), hintText: hintText),
     );
   }
 }
@@ -111,7 +110,8 @@ class PasswordField extends StatelessWidget {
       decoration: InputDecoration(
           prefixIcon: const Icon(Icons.lock),
           hintText: hintText,
-          helperText: showPolicy? "8-20 characters: A-Z, a-z, 0-9, (!@#\$&%.*)":null,
+          helperText:
+              showPolicy ? "8-20 characters: A-Z, a-z, 0-9, (!@#\$&%.*)" : null,
           helperMaxLines: 6),
     );
   }
@@ -164,40 +164,76 @@ class CategoryPick extends StatefulWidget {
 }
 
 class _CategoryPickState extends State<CategoryPick> {
+  TextEditingController search = TextEditingController();
+
   void onPressed() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: const Text("Pick event category"),
-              content: SingleChildScrollView(
-                child: Wrap(
-                    spacing: 10,
-                    alignment: WrapAlignment.spaceEvenly,
-                    children: EventsData.eventIcons.entries.map((entry) {
-                      return ActionChip(
-                        label: Text(entry.key),
-                        avatar: Icon(entry.value),
-                        onPressed: () {
-                          setState(() {
-                            widget.controller.text = entry.key;
-                          });
-                          Navigator.pop(context);
-                        },
-                      );
-                    }).toList()),
-              ));
-        });
+            context: context,
+            builder: (context) => CategoryDialog(controller: widget.controller))
+        .then((value) => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
     return widget.controller.text == ""
-        ? TextButton(
-            onPressed: onPressed, child: const Text("Choose category"))
+        ? TextButton(onPressed: onPressed, child: const Text("Choose category"))
         : TextButton.icon(
-          icon: Icon(EventsData.eventIcons[widget.controller.text]),
-            onPressed: onPressed, label: Text(widget.controller.text));
+            icon: Icon(EventsData.eventIcons[widget.controller.text]),
+            onPressed: onPressed,
+            label: Text(widget.controller.text));
+  }
+}
+
+class CategoryDialog extends StatefulWidget {
+  const CategoryDialog({super.key, required this.controller});
+  final TextEditingController controller;
+
+  @override
+  State<CategoryDialog> createState() => _CategoryDialogState();
+}
+
+class _CategoryDialogState extends State<CategoryDialog> {
+  TextEditingController search = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> content = EventsData.eventIcons.entries
+        .where((element) =>
+            element.key.toLowerCase().contains(search.text.toLowerCase()))
+        .map((entry) {
+      return ActionChip(
+        label: Text(entry.key),
+        avatar: Icon(entry.value),
+        onPressed: () {
+          setState(() {
+            widget.controller.text = entry.key;
+          });
+          Navigator.pop(context);
+        },
+      );
+    }).toList();
+
+    return AlertDialog(
+        title: const Text("Pick event category"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SearchBar(
+              controller: search,
+              onChanged: (text) => setState(() {
+                search.text = text;
+              }),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Wrap(
+                    spacing: 10,
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: content),
+              ),
+            ),
+          ],
+        ));
   }
 }
 
