@@ -219,6 +219,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SearchBar(
+              hintText: "Search...",
               controller: search,
               onChanged: (text) => setState(() {
                 search.text = text;

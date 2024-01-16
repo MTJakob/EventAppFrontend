@@ -47,7 +47,9 @@ class _EventCardState extends State<EventCard> {
     return AnimatedSize(
       duration: Durations.medium1,
       child: Card(
+        clipBehavior: Clip.hardEdge,
         child: ListTile(
+          selected: !(widget.eventId != selectedId && noneSelected),
           leading: Icon(
             EventsData.eventIcons[eventInfo["Category"]] ?? Icons.event,
             size: 30,
