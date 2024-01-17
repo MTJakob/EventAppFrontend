@@ -42,16 +42,11 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
-
-    List<Widget> content = [
-      Expanded(flex: 2, child: EventView(clip: isHorizontal ? Clip.antiAlias : Clip.none,)),
-      Expanded(flex: isHorizontal ? 3 : 1, child: const EventMap())
-    ];
-
     return FutureBuilder(
         future: MyAppData.of(context).getFile(),
         builder: (context, AsyncSnapshot<File> snapshot) {
+          bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
+
           if (snapshot.hasData && !snapshot.hasError) {
             return EventsData(
                 mapControl: animatedController,
@@ -59,14 +54,20 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
                 eventData: json.decode(snapshot.data!.readAsStringSync()),
                 selected: selected,
                 selector: selector,
-                child: isHorizontal
-                    ? Row(
-                        textDirection: TextDirection.rtl,
-                        children: content,
-                      )
-                    : Column(
-                        children: content,
-                      ));
+                child: Flex(
+                    direction: isHorizontal ? Axis.horizontal : Axis.vertical,
+                    textDirection: isHorizontal
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    children: [
+                      Expanded(
+                          flex: 2,
+                          child: EventView(
+                            clip: isHorizontal ? Clip.antiAlias : Clip.none,
+                          )),
+                      Expanded(
+                          flex: isHorizontal ? 3 : 1, child: const EventMap())
+                    ]));
           } else {
             return const Align(
                 alignment: Alignment.topCenter,
