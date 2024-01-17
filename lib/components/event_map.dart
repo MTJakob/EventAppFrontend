@@ -42,7 +42,7 @@ class _EventMapState extends State<EventMap>
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
+                userAgentPackageName: 'eventManager.app',
               ),
               MarkerLayer(
                   rotate: true,
@@ -64,7 +64,7 @@ class _EventMapState extends State<EventMap>
                                 index,
                                 LatLng(e["Address"]["X"], e["Address"]["Y"]))));
                   }).toList()),
-              Container(
+              Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () => animatedController.animatedRotateReset(),

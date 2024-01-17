@@ -2,9 +2,9 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:validators/validators.dart';
-//import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 
 class ManageEventPage extends StatefulWidget {
   const ManageEventPage({super.key, this.eventData});
@@ -15,21 +15,23 @@ class ManageEventPage extends StatefulWidget {
   State<ManageEventPage> createState() => _ManageEventPageState();
 }
 
-class _ManageEventPageState extends State<ManageEventPage> {
+class _ManageEventPageState extends State<ManageEventPage>
+    with TickerProviderStateMixin {
+  final formKey = GlobalKey<FormState>();
+
   TextEditingController nameController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController capacityController = TextEditingController();
+
   TextEditingController dateController = TextEditingController();
 
   TextEditingController daysController = TextEditingController();
   TextEditingController hoursController = TextEditingController();
   TextEditingController minutesController = TextEditingController();
-  MapController mapController = MapController();
-  LatLng? coordinates;
   Duration duration = const Duration();
 
-  final formKey = GlobalKey<FormState>();
+  LatLng? coordinates;
 
   @override
   void initState() {
@@ -49,10 +51,24 @@ class _ManageEventPageState extends State<ManageEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
+    Size size = MediaQuery.of(context).size;
+    bool isHorizontal = size.aspectRatio > 1;
+
+    AnimatedMapController animatedController =
+        AnimatedMapController(vsync: this);
 
     void submit() {
-      if (formKey.currentState!.validate()) {}
+      if (formKey.currentState!.validate()) {
+        duration = Duration(
+            days:
+                daysController.text == "" ? 0 : int.parse(daysController.text),
+            hours: hoursController.text == ""
+                ? 0
+                : int.parse(hoursController.text),
+            minutes: minutesController.text == ""
+                ? 0
+                : int.parse(minutesController.text));
+      }
     }
 
     return Scaffold(
@@ -65,106 +81,127 @@ class _ManageEventPageState extends State<ManageEventPage> {
       ),
       body: Card(
         margin: const EdgeInsets.all(10),
-        child: ListView(
-          shrinkWrap: true,
-          scrollDirection: isHorizontal ? Axis.horizontal : Axis.vertical,
+        child: Flex(
+          direction: isHorizontal ? Axis.horizontal : Axis.vertical,
           clipBehavior: Clip.antiAlias,
           children: [
-            Form(
-              key: formKey,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Table(
-                    children: [
-                      TableRow(children: [
-                        NameField(
-                          isDense: isHorizontal,
-                          controller: nameController,
-                          hintText: "Name",
-                          icon: Icons.abc,
-                        ),
-                        CategoryPick(controller: categoryController),
-                      ]),
-                      TableRow(children: [
-                        NumberField(
-                          controller: priceController,
-                          hintText: "Price",
-                          suffix: "\$",
-                          icon: Icons.price_change,
-                          isDense: isHorizontal,
-                        ),
-                        NumberField(
-                          controller: capacityController,
-                          hintText: "Capacity",
-                          suffix: "max",
-                          icon: Icons.people,
-                          isDense: isHorizontal,
-                        ),
-                      ]),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: DateTimePicker(
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                      type: DateTimePickerType.dateTimeSeparate,
-                      controller: dateController,
-                      dateHintText: "Date of the event",
-                      timeHintText: "Hour",
-                      icon: const Icon(Icons.event_note),
-                      validator: (val) => isDate(val!) ? null : "Select a date",
-                    ),
-                  ),
-                  Row(
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxWidth: size.width / (isHorizontal ? 2.2 : 1)),
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(
-                        child: NumberField(
-                          controller: daysController,
-                          suffix: "days",
-                          icon: Icons.more_time,
-                          isDense: isHorizontal,
+                      Table(
+                        children: [
+                          TableRow(children: [
+                            NameField(
+                              isDense: isHorizontal,
+                              controller: nameController,
+                              hintText: "Name",
+                              icon: Icons.abc,
+                            ),
+                            CategoryPick(controller: categoryController),
+                          ]),
+                          TableRow(children: [
+                            NumberField(
+                              controller: priceController,
+                              hintText: "Price",
+                              suffix: "\$",
+                              icon: Icons.price_change,
+                              isDense: isHorizontal,
+                            ),
+                            NumberField(
+                              controller: capacityController,
+                              hintText: "Capacity",
+                              suffix: "max",
+                              icon: Icons.people,
+                              isDense: isHorizontal,
+                            ),
+                          ]),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: DateTimePicker(
+                          firstDate: DateTime.now(),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 365)),
+                          type: DateTimePickerType.dateTimeSeparate,
+                          controller: dateController,
+                          dateHintText: "Date of the event",
+                          timeHintText: "Hour",
+                          icon: const Icon(Icons.event_note),
+                          validator: (val) =>
+                              isDate(val!) ? null : "Select a date",
                         ),
                       ),
-                      Flexible(
-                          child: NumberField(
-                              controller: hoursController,
-                              suffix: "h",
-                              isDense: isHorizontal)),
-                      Flexible(
-                          child: NumberField(
-                              controller: minutesController,
-                              suffix: "min",
-                              isDense: isHorizontal)),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: NumberField(
+                              controller: daysController,
+                              suffix: "days",
+                              icon: Icons.more_time,
+                              isDense: isHorizontal,
+                            ),
+                          ),
+                          Flexible(
+                              child: NumberField(
+                                  controller: hoursController,
+                                  suffix: "h",
+                                  isDense: isHorizontal)),
+                          Flexible(
+                              child: NumberField(
+                                  controller: minutesController,
+                                  suffix: "min",
+                                  isDense: isHorizontal)),
+                        ],
+                      )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
-            // SizedBox.square(
-            //   dimension: 500,
-            //   child: FlutterMap(
-            //           mapController: mapController,
-            //           options: const MapOptions(
-            //               keepAlive: true,
-            //               initialCenter: LatLng(38.1858, 15.5561),
-            //               initialZoom: 16),
-            //           children: [
-            //         TileLayer(
-            //           urlTemplate:
-            //               'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            //         ),
-            //         Container(
-            //             alignment: Alignment.topRight,
-            //             child: IconButton(
-            //               onPressed: () => mapController.rotate(0),
-            //               icon: const Icon(Icons.navigation_rounded),
-            //               color: Theme.of(context).primaryColor,
-            //             ))
-            //       ]),
-            // )
+            Expanded(
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                clipBehavior: Clip.hardEdge,
+                elevation: 10,
+                child: FlutterMap(
+                    mapController: animatedController.mapController,
+                    options: const MapOptions(
+                        keepAlive: true,
+                        initialCenter: LatLng(38.1858, 15.5561),
+                        initialZoom: 16),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'eventManager.app',
+                      ),
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            onPressed: () =>
+                                animatedController.animatedRotateReset(),
+                            icon: const Icon(Icons.navigation_rounded),
+                            color: Theme.of(context).primaryColor,
+                          )),
+                      // Align(
+                      //   alignment: Alignment.topLeft,
+                      //   child: Text(animatedController
+                      //       .mapController.camera.center
+                      //       .toString()),
+                      // )
+                    ]),
+              ),
+            )
           ],
         ),
       ),
