@@ -42,11 +42,11 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double aspectRatio = MediaQuery.of(context).size.aspectRatio;
+    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
 
     List<Widget> content = [
-      const Expanded(flex: 2, child: EventView()),
-      Expanded(flex: aspectRatio < 1 ? 1 : 3, child: const EventMap())
+      Expanded(flex: 2, child: EventView(clip: isHorizontal ? Clip.antiAlias : Clip.none,)),
+      Expanded(flex: isHorizontal ? 3 : 1, child: const EventMap())
     ];
 
     return FutureBuilder(
@@ -59,7 +59,7 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
                 eventData: json.decode(snapshot.data!.readAsStringSync()),
                 selected: selected,
                 selector: selector,
-                child: aspectRatio > 1
+                child: isHorizontal
                     ? Row(
                         textDirection: TextDirection.rtl,
                         children: content,

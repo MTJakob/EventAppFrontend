@@ -1,12 +1,19 @@
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:flutter/material.dart';
 
-class PasswordDialog extends StatelessWidget {
+class PasswordDialog extends StatefulWidget {
   const PasswordDialog({super.key});
 
   @override
+  State<PasswordDialog> createState() => _PasswordDialogState();
+}
+
+class _PasswordDialogState extends State<PasswordDialog> {
+  final formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
 
     TextEditingController oldPwd = TextEditingController();
     TextEditingController newPwd = TextEditingController();
@@ -19,18 +26,32 @@ class PasswordDialog extends StatelessWidget {
     }
 
     return AlertDialog(
-      title: const Text("Password change"),
-      content: Form(
-        key: formKey,
-        child: SizedBox(
-          width: double.maxFinite,
+      actionsPadding: const EdgeInsets.fromLTRB(0,0,10,5),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 50),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      title: isHorizontal ? null : const Text("Password change", textAlign: TextAlign.center,),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Form(
+          key: formKey,
           child: ListView(
             shrinkWrap: true,
-            clipBehavior: Clip.antiAlias,
             children: [
-              PasswordField(controller: oldPwd, hintText: "Old Password",),
-              PasswordField(controller: newPwd, hintText: "New Password",showPolicy: true,),
-              PasswordField(controller: repeatPwd, hintText: "Repeat Password", firstField: newPwd,)
+              PasswordField(
+                controller: oldPwd,
+                hintText: "Old Password",
+                isDense: isHorizontal,
+              ),
+              PasswordField(
+                  controller: newPwd,
+                  hintText: "New Password",
+                  showPolicy: true,
+                  isDense: isHorizontal),
+              PasswordField(
+                  controller: repeatPwd,
+                  hintText: "Repeat Password",
+                  firstField: newPwd,
+                  isDense: isHorizontal)
             ],
           ),
         ),

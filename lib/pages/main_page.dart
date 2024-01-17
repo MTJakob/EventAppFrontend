@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(initialPage: currentPageIndex);
-    double aspectRatio = MediaQuery.of(context).size.aspectRatio;
+    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
 
     destinationSelect(int index) {
       setState(() {
@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           title: const TitleText(),
         ),
-        bottomNavigationBar: aspectRatio > 1
+        bottomNavigationBar: isHorizontal
             ? null
             : NavigationBar(
                 destinations: const [
@@ -50,7 +50,7 @@ class _MainPageState extends State<MainPage> {
         body: SafeArea(
             child: Row(
           children: [
-            aspectRatio > 1
+            isHorizontal
                 ? NavigationRail(
                     labelType: NavigationRailLabelType.all,
                     destinations: const [
@@ -75,6 +75,9 @@ class _MainPageState extends State<MainPage> {
                 : const SizedBox.shrink(),
             Expanded(
               child: PageView(
+                scrollDirection: isHorizontal
+                    ? Axis.vertical
+                    : Axis.horizontal,
                 onPageChanged: (int newIndex) {
                   currentPageIndex != newIndex
                       ? destinationSelect(newIndex)

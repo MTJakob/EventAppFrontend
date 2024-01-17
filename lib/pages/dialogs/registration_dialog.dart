@@ -1,12 +1,19 @@
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationDialog extends StatelessWidget {
+class RegistrationDialog extends StatefulWidget {
   const RegistrationDialog({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<RegistrationDialog> createState() => _RegistrationDialogState();
+}
+
+class _RegistrationDialogState extends State<RegistrationDialog> {
     final formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
 
     TextEditingController nameController = TextEditingController();
     TextEditingController surnameController = TextEditingController();
@@ -29,7 +36,10 @@ class RegistrationDialog extends StatelessWidget {
     }
 
     return AlertDialog(
-      title: const Text("Tell us about yourself"),
+      actionsPadding: const EdgeInsets.fromLTRB(0,0,10,5),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 50),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      title: isHorizontal ? null : const Text("Tell us about yourself", textAlign: TextAlign.center,),
       content: Form(
         key: formKey,
         child: SizedBox(
@@ -38,11 +48,11 @@ class RegistrationDialog extends StatelessWidget {
             shrinkWrap: true,
             clipBehavior: Clip.antiAlias,
             children: [
-              NameField(controller: nameController),
-              NameField(controller: surnameController, hintText: "Surname"),
-              EmailField(controller: emailController),
-              PasswordField(controller: passwordController, showPolicy: true,),
-              BirthdayField(controller: dateController)
+              NameField(controller: nameController, isDense: isHorizontal,),
+              NameField(controller: surnameController, hintText: "Surname", isDense: isHorizontal),
+              EmailField(controller: emailController, isDense: isHorizontal),
+              PasswordField(controller: passwordController, showPolicy: true, isDense: isHorizontal),
+              BirthdayField(controller: dateController, isDense: isHorizontal)
             ],
           ),
         ),

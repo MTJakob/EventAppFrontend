@@ -9,28 +9,35 @@ class NameField extends StatelessWidget {
       required this.controller,
       this.hintText = "Name",
       this.isLocked = false,
-      this.icon = Icons.person});
+      this.icon = Icons.person,
+      this.isDense = false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
   final IconData icon;
+  final bool isDense;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      readOnly: isLocked,
-      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-      maxLength: isLocked ? null : 16,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (String? current) {
-        return isAlpha(current!) ? null : "Only english characters allowed!";
-      },
-      textInputAction: TextInputAction.next,
-      textCapitalization: TextCapitalization.words,
-      keyboardType: TextInputType.name,
-      decoration: InputDecoration(prefixIcon: Icon(icon), hintText: hintText),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextFormField(
+          controller: controller,
+          readOnly: isLocked,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          maxLength: isLocked ? null : 16,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (String? current) {
+            return isAlpha(current!)
+                ? null
+                : "Only english characters allowed!";
+          },
+          textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.words,
+          keyboardType: TextInputType.name,
+          decoration: InputDecoration(
+              prefixIcon: Icon(icon), hintText: hintText, isDense: isDense),
+        ));
   }
 }
 
@@ -39,24 +46,30 @@ class EmailField extends StatelessWidget {
       {super.key,
       required this.controller,
       this.hintText = "Email",
-      this.isLocked = false});
+      this.isLocked = false,
+      this.isDense = false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
+  final bool isDense;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      readOnly: isLocked,
-      validator: (String? current) {
-        return isEmail(current!) ? null : "Not a valid email adress!";
-      },
-      textInputAction: TextInputAction.next,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.mail), hintText: hintText),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextFormField(
+          controller: controller,
+          readOnly: isLocked,
+          validator: (String? current) {
+            return isEmail(current!) ? null : "Not a valid email adress!";
+          },
+          textInputAction: TextInputAction.next,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.mail),
+              hintText: hintText,
+              isDense: isDense),
+        ));
   }
 }
 
@@ -67,53 +80,61 @@ class PasswordField extends StatelessWidget {
       this.hintText = "Password",
       this.isLocked = false,
       this.firstField,
-      this.showPolicy = false});
+      this.showPolicy = false,
+      this.isDense = false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
   final TextEditingController? firstField;
   final bool showPolicy;
+  final bool isDense;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      readOnly: isLocked,
-      validator: (current) {
-        if (current == null) {
-          return "Cannot be empty";
-        } else if (firstField != null) {
-          return current == firstField!.text ? null : "Passwords do not match";
-        }
-        String prompt = "";
-        if (!current.contains(RegExp(r'[A-Z]'))) {
-          prompt += "uppercase, ";
-        }
-        if (!current.contains(RegExp(r'[a-z]'))) {
-          prompt += "lowercase, ";
-        }
-        if (!current.contains(RegExp(r'[0-9]'))) {
-          prompt += "digit, ";
-        }
-        if (!current.contains(RegExp(r'[!@#\$&%.*]'))) {
-          prompt += "special";
-        }
-        if (prompt != "") {
-          return "Missing: $prompt";
-        } else if (current.length < 8 || current.length > 20) {
-          return "Has to be 8-20 characters";
-        }
-        return null;
-      },
-      textInputAction: TextInputAction.next,
-      obscureText: true,
-      decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.lock),
-          hintText: hintText,
-          helperText:
-              showPolicy ? "8-20 characters: A-Z, a-z, 0-9, (!@#\$&%.*)" : null,
-          helperMaxLines: 6),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextFormField(
+          controller: controller,
+          readOnly: isLocked,
+          validator: (current) {
+            if (current == null) {
+              return "Cannot be empty";
+            } else if (firstField != null) {
+              return current == firstField!.text
+                  ? null
+                  : "Passwords do not match";
+            }
+            String prompt = "";
+            if (!current.contains(RegExp(r'[A-Z]'))) {
+              prompt += "uppercase, ";
+            }
+            if (!current.contains(RegExp(r'[a-z]'))) {
+              prompt += "lowercase, ";
+            }
+            if (!current.contains(RegExp(r'[0-9]'))) {
+              prompt += "digit, ";
+            }
+            if (!current.contains(RegExp(r'[!@#\$&%.*]'))) {
+              prompt += "special";
+            }
+            if (prompt != "") {
+              return "Missing: $prompt";
+            } else if (current.length < 8 || current.length > 20) {
+              return "Has to be 8-20 characters";
+            }
+            return null;
+          },
+          textInputAction: TextInputAction.next,
+          obscureText: true,
+          decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.lock),
+              helperText: showPolicy
+                  ? "8-20 characters: A-Z, a-z, 0-9, (!@#\$&%.*)"
+                  : null,
+              helperMaxLines: 6,
+              hintText: hintText,
+              isDense: isDense),
+        ));
   }
 }
 
@@ -122,36 +143,42 @@ class BirthdayField extends StatelessWidget {
       {super.key,
       required this.controller,
       this.hintText = "Birthday",
-      this.isLocked = false});
+      this.isLocked = false,
+      this.isDense = false});
   final TextEditingController controller;
   final String hintText;
   final bool isLocked;
+  final bool isDense;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-        validator: (String? current) {
-          return isDate(current!) ? null : "Not a valid date!";
-        },
-        controller: controller,
-        decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.cake), hintText: hintText),
-        readOnly: true,
-        onTap: () async {
-          if (!isLocked) {
-            DateTime? picked = await showDatePicker(
-                helpText: "Select your birthday",
-                initialDatePickerMode: DatePickerMode.year,
-                initialEntryMode: DatePickerEntryMode.calendarOnly,
-                context: context,
-                firstDate: DateTime(1900),
-                lastDate:
-                    DateTime.now().subtract(const Duration(days: 365 * 13)));
-            if (picked != null) {
-              controller.text = picked.toString().split(' ').first;
-            }
-          }
-        });
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextFormField(
+            validator: (String? current) {
+              return isDate(current!) ? null : "Not a valid date!";
+            },
+            controller: controller,
+            decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.cake),
+                hintText: hintText,
+                isDense: isDense),
+            readOnly: true,
+            onTap: () async {
+              if (!isLocked) {
+                DateTime? picked = await showDatePicker(
+                    helpText: "Select your birthday",
+                    initialDatePickerMode: DatePickerMode.year,
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    context: context,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now()
+                        .subtract(const Duration(days: 365 * 13)));
+                if (picked != null) {
+                  controller.text = picked.toString().split(' ').first;
+                }
+              }
+            }));
   }
 }
 
@@ -175,12 +202,15 @@ class _CategoryPickState extends State<CategoryPick> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.controller.text == ""
-        ? TextButton(onPressed: onPressed, child: const Text("Choose category"))
-        : TextButton.icon(
-            icon: Icon(EventsData.eventIcons[widget.controller.text]),
-            onPressed: onPressed,
-            label: Text(widget.controller.text));
+    return Padding(
+        padding: const EdgeInsets.all(10),
+        child: widget.controller.text == ""
+            ? TextButton(
+                onPressed: onPressed, child: const Text("Choose category"))
+            : TextButton.icon(
+                icon: Icon(EventsData.eventIcons[widget.controller.text]),
+                onPressed: onPressed,
+                label: Text(widget.controller.text)));
   }
 }
 
@@ -213,28 +243,38 @@ class _CategoryDialogState extends State<CategoryDialog> {
       );
     }).toList();
 
-    return AlertDialog(
-        title: const Text("Pick event category"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SearchBar(
-              hintText: "Search...",
-              controller: search,
-              onChanged: (text) => setState(() {
-                search.text = text;
-              }),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Wrap(
-                    spacing: 10,
-                    alignment: WrapAlignment.spaceEvenly,
-                    children: content),
+    return Dialog(
+          clipBehavior: Clip.hardEdge,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                child: SearchBar(
+                    hintText: "Search categories...",
+                    controller: search,
+                    onChanged: (text) => setState(() {
+                          search.text = text;
+                        })),
               ),
-            ),
-          ],
-        ));
+              Flexible(
+                child: AnimatedSize(
+                  duration: Durations.short4,
+                  child: SingleChildScrollView(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                    clipBehavior: Clip.antiAlias,
+                    child: Wrap(
+                        spacing: 10,
+                        alignment: WrapAlignment.spaceEvenly,
+                        children: content),
+                  ),
+                ),
+              )
+            ],
+          )
+    );
   }
 }
 
@@ -245,26 +285,36 @@ class NumberField extends StatelessWidget {
       this.hintText,
       this.isLocked = false,
       this.suffix,
-      this.icon});
+      this.icon,
+      this.isDense = false});
   final TextEditingController controller;
   final String? hintText;
   final bool isLocked;
   final String? suffix;
   final IconData? icon;
+  final bool isDense;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      textAlign: TextAlign.center,
-      controller: controller,
-      readOnly: isLocked,
-      validator: (String? current) {
-        return isInt(current!) ? null : "Not a valid number!";
-      },
-      textInputAction: TextInputAction.next,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          prefixIcon: Icon(icon), hintText: hintText, suffixText: suffix),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: TextFormField(
+        textAlign: TextAlign.center,
+        controller: controller,
+        readOnly: isLocked,
+        validator: (String? current) {
+          return isInt(current!) || current == ""
+              ? null
+              : "Not a valid number!";
+        },
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+            prefixIcon: Icon(icon),
+            hintText: hintText,
+            suffixText: suffix,
+            isDense: isDense),
+      ),
     );
   }
 }

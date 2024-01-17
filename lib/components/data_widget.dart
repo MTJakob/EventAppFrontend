@@ -7,7 +7,7 @@ class MyAppData extends InheritedWidget {
   final cache =
       CacheManager(Config("cache", stalePeriod: const Duration(hours: 1)));
 
-  final String host = "http://192.168.20.137:5000";
+  final String host = "http://192.168.214.137:5000";
 
   Future<File> getFile() async {
     return await cache.getSingleFile(host);

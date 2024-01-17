@@ -17,40 +17,36 @@ class LoginPage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Form(
-        child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      body: Center(
+        child: Form(
+            child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsetsDirectional.only(bottom: 10),
-                child: const TitleText(),
-              ),
-              TextFormField(
-                controller: loginController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.person),
-                  labelText: "Email:",
-                  border: OutlineInputBorder(borderSide: BorderSide(width: 5)),
-                ),
-              ),
+              const TitleText(),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: TextFormField(
-                  controller: pwdController,
-                  obscureText: true,
+                  controller: loginController,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    labelText: "Password:",
+                    prefixIcon: Icon(Icons.person),
+                    labelText: "Email:",
                     border:
                         OutlineInputBorder(borderSide: BorderSide(width: 5)),
                   ),
                 ),
               ),
-              FilledButton.tonal(
-                  onPressed: submit, child: const Text("Submit")),
+              TextFormField(
+                controller: pwdController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.lock),
+                  labelText: "Password:",
+                  border: OutlineInputBorder(borderSide: BorderSide(width: 5)),
+                ),
+              ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Text("Not registered yet?"),
                 TextButton(
@@ -58,11 +54,13 @@ class LoginPage extends StatelessWidget {
                         context: context,
                         builder: (_) => const RegistrationDialog(),
                         barrierDismissible: false),
-                    child: const Text("SIGN UP"))
-              ])
+                    child: const Text("SIGN UP")),
+              ]),
+              FilledButton.tonal(
+                  onPressed: submit, child: const Text("Submit")),
             ],
           ),
-        ),
+        )),
       ),
     );
   }
