@@ -9,37 +9,36 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> eventsData = EventsData.of(context).eventData;
+    List<Map<String, dynamic>> eventsData = EventsData.of(context).eventData;
 
     return AnimatedList(
         clipBehavior: clip,
         initialItemCount: eventsData.length,
         itemBuilder: (_, index, animation) {
-          String eventId = eventsData.keys.elementAt(index);
-          return EventCard(eventId: eventId);
+          return EventCard(eventIndex: index);
         });
   }
 }
 
 class EventCard extends StatefulWidget {
-  const EventCard({super.key, required this.eventId});
-  final String eventId;
+  const EventCard({super.key, required this.eventIndex});
+  final int eventIndex;
 
   @override
   State<EventCard> createState() => _EventCardState();
 }
 
 class _EventCardState extends State<EventCard> {
-  String? selectedId;
+  int? selectedIndex;
 
   bool noneSelected = true;
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> eventInfo =
-        EventsData.of(context).eventData[widget.eventId];
+        EventsData.of(context).eventData.elementAt(widget.eventIndex);
 
     if (EventsData.of(context).selected != null) {
-      selectedId = EventsData.of(context).selected!();
+      selectedIndex = EventsData.of(context).selected!();
     } else {
       noneSelected = false;
     }
@@ -49,13 +48,13 @@ class _EventCardState extends State<EventCard> {
       child: Card(
         clipBehavior: Clip.hardEdge,
         child: ListTile(
-          selected: !(widget.eventId != selectedId && noneSelected),
+          selected: !(widget.eventIndex != selectedIndex && noneSelected),
           leading: Icon(
             EventsData.eventIcons[eventInfo["Category"]] ?? Icons.event,
             size: 30,
           ),
           title: Text(eventInfo["Name"], softWrap: true),
-          subtitle: widget.eventId != selectedId && noneSelected
+          subtitle: widget.eventIndex != selectedIndex && noneSelected
               ? Text(eventInfo["Date"], softWrap: true)
               : Row(
                   children: [
@@ -80,7 +79,7 @@ class _EventCardState extends State<EventCard> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true),
                         // is admin
-                        false
+                        true
                             ? IconButton(
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -106,7 +105,7 @@ class _EventCardState extends State<EventCard> {
                     )
                   ],
                 ),
-          onTap: () => EventsData.of(context).selector!(widget.eventId,
+          onTap: () => EventsData.of(context).selector!(widget.eventIndex,
               LatLng(eventInfo["Address"]["X"], eventInfo["Address"]["Y"])),
         ),
       ),

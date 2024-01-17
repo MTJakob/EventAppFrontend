@@ -17,27 +17,27 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
-  String? selectedId;
+  int? selectedIndex;
   MapController controller = MapController();
   late final AnimatedMapController animatedController =
       AnimatedMapController(vsync: this, mapController: controller);
 
-  void selector(String id, LatLng coordinates) {
+  void selector(int index, LatLng coordinates) {
     animatedController.animateTo(
         dest: coordinates, zoom: controller.camera.zoom);
-    if (selectedId == id) {
+    if (selectedIndex == index) {
       setState(() {
-        selectedId = null;
+        selectedIndex = null;
       });
     } else {
       setState(() {
-        selectedId = id;
+        selectedIndex = index;
       });
     }
   }
 
-  String? selected() {
-    return selectedId;
+  int? selected() {
+    return selectedIndex;
   }
 
   @override
@@ -51,14 +51,15 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
             return EventsData(
                 mapControl: animatedController,
                 snapshotData: snapshot.data,
-                eventData: json.decode(snapshot.data!.readAsStringSync()),
+                eventData: json
+                    .decode(snapshot.data!.readAsStringSync())
+                    .cast<Map<String, dynamic>>(),
                 selected: selected,
                 selector: selector,
                 child: Flex(
                     direction: isHorizontal ? Axis.horizontal : Axis.vertical,
-                    textDirection: isHorizontal
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
+                    textDirection:
+                        isHorizontal ? TextDirection.rtl : TextDirection.ltr,
                     children: [
                       Expanded(
                           flex: 2,

@@ -145,7 +145,9 @@ class _ProfileTabState extends State<ProfileTab> {
                   if (snapshot.hasData) {
                     return EventsData(
                       snapshotData: snapshot.data,
-                      eventData: json.decode(snapshot.data!.readAsStringSync()),
+                      eventData: json
+                          .decode(snapshot.data!.readAsStringSync())
+                          .cast<Map<String, dynamic>>(),
                       child: const EventView(
                         clip: Clip.hardEdge,
                       ),

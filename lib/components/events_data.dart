@@ -16,7 +16,7 @@ class EventsData extends InheritedWidget {
 
   final File? snapshotData;
 
-  final Map<String, dynamic> eventData;
+  final List<Map<String, dynamic>> eventData;
 
   final Function? selected;
   final Function? selector;
@@ -27,10 +27,10 @@ class EventsData extends InheritedWidget {
     "Match": Icons.stadium,
     "Motorsports": Icons.sports_motorsports,
     //team sports
-    "Soccer":Icons.sports_soccer,
+    "Soccer": Icons.sports_soccer,
     "Tennis": Icons.sports_tennis,
     "Baseball": Icons.sports_baseball,
-    "Volleyball":Icons.sports_volleyball,
+    "Volleyball": Icons.sports_volleyball,
     "Football": Icons.sports_football,
     "Handball": Icons.sports_handball,
     //casual sports
@@ -65,7 +65,7 @@ class EventsData extends InheritedWidget {
     "Networking": Icons.groups,
     "Workshop": Icons.construction,
     "Psychology": Icons.psychology,
-    "Seminary" :Icons.psychology_alt,
+    "Seminary": Icons.psychology_alt,
     "Lecture": Icons.school,
     //gathering
     "Birthday": Icons.cake,

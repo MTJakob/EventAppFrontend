@@ -13,18 +13,19 @@ class EventMap extends StatefulWidget {
   State<EventMap> createState() => _EventMapState();
 }
 
-class _EventMapState extends State<EventMap>  with SingleTickerProviderStateMixin {
+class _EventMapState extends State<EventMap>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> data = EventsData.of(context).eventData;
+    List<Map<String, dynamic>> data = EventsData.of(context).eventData;
 
-    String? selectedId;
+    int? selectedIndex;
 
     AnimatedMapController animatedController =
         EventsData.of(context).mapControl ?? AnimatedMapController(vsync: this);
 
     if (EventsData.of(context).selected != null) {
-      selectedId = EventsData.of(context).selected!();
+      selectedIndex = EventsData.of(context).selected!();
     }
 
     return Card(
@@ -35,7 +36,9 @@ class _EventMapState extends State<EventMap>  with SingleTickerProviderStateMixi
         child: FlutterMap(
             mapController: animatedController.mapController,
             options: MapOptions(
-                keepAlive: true, initialCenter: EventMap.centralPoint, initialZoom: 16),
+                keepAlive: true,
+                initialCenter: EventMap.centralPoint,
+                initialZoom: 16),
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -43,30 +46,24 @@ class _EventMapState extends State<EventMap>  with SingleTickerProviderStateMixi
               ),
               MarkerLayer(
                   rotate: true,
-                  markers: data
-                      .map((String eventId, value) => MapEntry(
-                          eventId,
-                          Marker(
-                              alignment: const Alignment(0, -0.7),
-                              point: LatLng(
-                                  value["Address"]["X"], value["Address"]["Y"]),
-                              child: IconButton(
-                                  iconSize: 30,
-                                  padding: const EdgeInsetsDirectional.all(0),
-                                  icon: Icon(
-                                    Icons.place,
-                                    color: 
-                                    selectedId == eventId
-                                        ? Colors.red
-                                        : Theme.of(context).primaryColor,
-                                  ),
-                                  onPressed: () => EventsData.of(context)
-                                          .selector!(
-                                      eventId,
-                                      LatLng(data[eventId]["Address"]["X"],
-                                          data[eventId]["Address"]["Y"]))))))
-                      .values
-                      .toList()),
+                  markers: data.map((e) {
+                    int index = data.indexOf(e);
+                    return Marker(
+                        alignment: const Alignment(0, -0.7),
+                        point: LatLng(e["Address"]["X"], e["Address"]["Y"]),
+                        child: IconButton(
+                            iconSize: 30,
+                            padding: const EdgeInsetsDirectional.all(0),
+                            icon: Icon(
+                              Icons.place,
+                              color: selectedIndex == index
+                                  ? Colors.red
+                                  : Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () => EventsData.of(context).selector!(
+                                index,
+                                LatLng(e["Address"]["X"], e["Address"]["Y"]))));
+                  }).toList()),
               Container(
                   alignment: Alignment.topRight,
                   child: IconButton(
