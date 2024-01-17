@@ -1,6 +1,7 @@
 import 'package:event_flutter_application/components/event_view.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:event_flutter_application/pages/dialogs/password_dialog.dart';
+import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/data_widget.dart';
 import 'package:event_flutter_application/components/events_data.dart';
@@ -49,7 +50,8 @@ class _ProfileTabState extends State<ProfileTab> {
       direction: isHorizontal ? Axis.horizontal : Axis.vertical,
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: size.width/ (isHorizontal ? 2.2 : 1)),
+          constraints:
+              BoxConstraints(maxWidth: size.width / (isHorizontal ? 2.2 : 1)),
           child: Card(
             child: Form(
               key: formKey,
@@ -59,26 +61,22 @@ class _ProfileTabState extends State<ProfileTab> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     NameField(
-                      controller: controllerName,
-                      isLocked: isLocked,
-                      isDense: isHorizontal
-                    ),
+                        controller: controllerName,
+                        isLocked: isLocked,
+                        isDense: isHorizontal),
                     NameField(
-                      controller: controllerSurname,
-                      isLocked: isLocked,
-                      hintText: "Surname",
-                      isDense: isHorizontal
-                    ),
+                        controller: controllerSurname,
+                        isLocked: isLocked,
+                        hintText: "Surname",
+                        isDense: isHorizontal),
                     EmailField(
-                      controller: controllerEmail,
-                      isLocked: isLocked,
-                      isDense: isHorizontal
-                    ),
+                        controller: controllerEmail,
+                        isLocked: isLocked,
+                        isDense: isHorizontal),
                     BirthdayField(
-                      controller: controllerBirth,
-                      isLocked: isLocked,
-                      isDense: isHorizontal
-                    ),
+                        controller: controllerBirth,
+                        isLocked: isLocked,
+                        isDense: isHorizontal),
                     Wrap(
                       spacing: 20,
                       alignment: WrapAlignment.spaceBetween,
@@ -101,6 +99,14 @@ class _ProfileTabState extends State<ProfileTab> {
                                   label: const Text("Log out"),
                                   avatar: const Icon(Icons.logout),
                                   onPressed: logOut),
+                              ActionChip(
+                                label: const Text("Add event"),
+                                avatar: const Icon(Icons.event),
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ManageEventPage())),
+                              )
                             ]
                           : [
                               ActionChip(

@@ -80,7 +80,7 @@ class _EventCardState extends State<EventCard> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true),
                         // is admin
-                        true
+                        false
                             ? IconButton(
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
