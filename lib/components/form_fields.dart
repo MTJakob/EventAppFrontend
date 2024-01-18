@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
 import 'package:event_flutter_application/components/events_data.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:latlong2/latlong.dart';
 
 class NameField extends StatelessWidget {
   const NameField(
@@ -244,37 +247,36 @@ class _CategoryDialogState extends State<CategoryDialog> {
     }).toList();
 
     return Dialog(
-          clipBehavior: Clip.hardEdge,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                child: SearchBar(
-                    hintText: "Search categories...",
-                    controller: search,
-                    onChanged: (text) => setState(() {
-                          search.text = text;
-                        })),
-              ),
-              Flexible(
-                child: AnimatedSize(
-                  duration: Durations.short4,
-                  child: SingleChildScrollView(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                    clipBehavior: Clip.antiAlias,
-                    child: Wrap(
-                        spacing: 10,
-                        alignment: WrapAlignment.spaceEvenly,
-                        children: content),
-                  ),
+        clipBehavior: Clip.hardEdge,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+              child: SearchBar(
+                  hintText: "Search categories...",
+                  controller: search,
+                  onChanged: (text) => setState(() {
+                        search.text = text;
+                      })),
+            ),
+            Flexible(
+              child: AnimatedSize(
+                duration: Durations.short4,
+                child: SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                  clipBehavior: Clip.antiAlias,
+                  child: Wrap(
+                      spacing: 10,
+                      alignment: WrapAlignment.spaceEvenly,
+                      children: content),
                 ),
-              )
-            ],
-          )
-    );
+              ),
+            )
+          ],
+        ));
   }
 }
 
@@ -316,5 +318,68 @@ class NumberField extends StatelessWidget {
             isDense: isDense),
       ),
     );
+  }
+}
+
+class MapInput extends StatefulWidget {
+  const MapInput({super.key, this.submit});
+  final Function? submit;
+
+  @override
+  State<MapInput> createState() => _MapInputState();
+}
+
+class _MapInputState extends State<MapInput> with TickerProviderStateMixin {
+  LatLng pointer = const LatLng(0, 0);
+
+  @override
+  Widget build(BuildContext context) {
+    AnimatedMapController animatedController =
+        AnimatedMapController(vsync: this);
+    return FlutterMap(
+        mapController: animatedController.mapController,
+        options: const MapOptions(
+            keepAlive: true,
+            initialCenter: LatLng(38.1858, 15.5561),
+            initialZoom: 16),
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'eventManager.app',
+          ),
+          MarkerLayer(rotate: true, markers: [
+            Marker(
+                alignment: const Alignment(-0.7, -2),
+                point: pointer,
+                child: IconButton(
+                    iconSize: 50,
+                    padding: const EdgeInsetsDirectional.all(0),
+                    icon: Icon(
+                      Icons.place,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () => ()))
+          ]),
+          Builder(builder: (context) {
+            return Center(
+                child: IconButton(
+                    icon: const Icon(
+                      Icons.filter_center_focus,
+                    ),
+                    onPressed: () => setState(() {
+                          pointer = MapController.of(context).camera.center;
+                          widget.submit == null
+                              ? null
+                              : widget.submit!(pointer);
+                        })));
+          }),
+          Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () => animatedController.animatedRotateReset(),
+                icon: const Icon(Icons.navigation_rounded),
+                color: Theme.of(context).primaryColor,
+              )),
+        ]);
   }
 }

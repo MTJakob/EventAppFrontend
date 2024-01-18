@@ -2,7 +2,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:validators/validators.dart';
 
@@ -15,8 +14,7 @@ class ManageEventPage extends StatefulWidget {
   State<ManageEventPage> createState() => _ManageEventPageState();
 }
 
-class _ManageEventPageState extends State<ManageEventPage>
-    with TickerProviderStateMixin {
+class _ManageEventPageState extends State<ManageEventPage> {
   final formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
@@ -31,7 +29,7 @@ class _ManageEventPageState extends State<ManageEventPage>
   TextEditingController minutesController = TextEditingController();
   Duration duration = const Duration();
 
-  LatLng? coordinates;
+  LatLng coordinates = const LatLng(0, 0);
 
   @override
   void initState() {
@@ -54,9 +52,6 @@ class _ManageEventPageState extends State<ManageEventPage>
     Size size = MediaQuery.of(context).size;
     bool isHorizontal = size.aspectRatio > 1;
 
-    AnimatedMapController animatedController =
-        AnimatedMapController(vsync: this);
-
     void submit() {
       if (formKey.currentState!.validate()) {
         duration = Duration(
@@ -69,6 +64,10 @@ class _ManageEventPageState extends State<ManageEventPage>
                 ? 0
                 : int.parse(minutesController.text));
       }
+    }
+
+    void changeLocation(LatLng location) {
+      coordinates = location;
     }
 
     return Scaffold(
@@ -169,38 +168,11 @@ class _ManageEventPageState extends State<ManageEventPage>
             ),
             Expanded(
               child: Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                clipBehavior: Clip.hardEdge,
-                elevation: 10,
-                child: FlutterMap(
-                    mapController: animatedController.mapController,
-                    options: const MapOptions(
-                        keepAlive: true,
-                        initialCenter: LatLng(38.1858, 15.5561),
-                        initialZoom: 16),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'eventManager.app',
-                      ),
-                      Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            onPressed: () =>
-                                animatedController.animatedRotateReset(),
-                            icon: const Icon(Icons.navigation_rounded),
-                            color: Theme.of(context).primaryColor,
-                          )),
-                      // Align(
-                      //   alignment: Alignment.topLeft,
-                      //   child: Text(animatedController
-                      //       .mapController.camera.center
-                      //       .toString()),
-                      // )
-                    ]),
-              ),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  clipBehavior: Clip.hardEdge,
+                  elevation: 10,
+                  child: MapInput(submit: changeLocation)),
             )
           ],
         ),
