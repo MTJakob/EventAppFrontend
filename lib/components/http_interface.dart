@@ -5,14 +5,13 @@ import 'dart:convert';
 class AppHttpInterface extends InheritedWidget {
   const AppHttpInterface({super.key, required super.child});
 
-  static String host = "http://192.168.169.137:5000";
+  static String host = "http://192.168.40.137:5000";
 
   Future<List<Map<String, dynamic>>> getEventList() async {
     final response = await get(Uri.parse(host));
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       return json.decode(response.body).cast<Map<String, dynamic>>();
-    }
-    else{
+    } else {
       throw Exception('Failed to get Events');
     }
   }

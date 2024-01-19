@@ -48,7 +48,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.sizeOf(context);
     bool isHorizontal = size.aspectRatio > 1;
 
     void submit() {

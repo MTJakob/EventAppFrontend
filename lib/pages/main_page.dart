@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(initialPage: currentPageIndex);
-    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
+    bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
 
     destinationSelect(int index) {
       setState(() {

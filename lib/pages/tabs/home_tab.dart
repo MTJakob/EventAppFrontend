@@ -48,7 +48,7 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
     return FutureBuilder<List<Map<String, dynamic>>>(
         future: futureEventList,
         builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-          bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
+          bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
 
           if (snapshot.hasData && !snapshot.hasError) {
             return EventsData(

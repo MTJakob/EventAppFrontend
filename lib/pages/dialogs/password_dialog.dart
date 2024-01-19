@@ -13,7 +13,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
+    bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
 
     TextEditingController oldPwd = TextEditingController();
     TextEditingController newPwd = TextEditingController();
@@ -26,10 +26,15 @@ class _PasswordDialogState extends State<PasswordDialog> {
     }
 
     return AlertDialog(
-      actionsPadding: const EdgeInsets.fromLTRB(0,0,10,5),
+      actionsPadding: const EdgeInsets.fromLTRB(0, 0, 10, 5),
       insetPadding: const EdgeInsets.symmetric(horizontal: 50),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-      title: isHorizontal ? null : const Text("Password change", textAlign: TextAlign.center,),
+      title: isHorizontal
+          ? null
+          : const Text(
+              "Password change",
+              textAlign: TextAlign.center,
+            ),
       content: SizedBox(
         width: double.maxFinite,
         child: Form(
