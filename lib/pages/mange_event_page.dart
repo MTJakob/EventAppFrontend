@@ -1,4 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:latlong2/latlong.dart';
@@ -62,6 +63,16 @@ class _ManageEventPageState extends State<ManageEventPage> {
             minutes: minutesController.text == ""
                 ? 0
                 : int.parse(minutesController.text));
+        AppHttpInterface.of(context).postEvent({
+          "Name": nameController.text,
+          "Price": priceController.text,
+          "Capacity": capacityController.text,
+          "Date": dateController.text,
+          "Duration": duration,
+          "Address": coordinates,
+          "Category": categoryController.text
+        }).then((value) =>
+            value.statusCode == 200 ? Navigator.of(context).pop() : null);
       }
     }
 

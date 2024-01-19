@@ -365,6 +365,7 @@ class _MapInputState extends State<MapInput> with TickerProviderStateMixin {
                 child: IconButton(
                     icon: const Icon(
                       Icons.filter_center_focus,
+                      color: Colors.black,
                     ),
                     onPressed: () => setState(() {
                           pointer = MapController.of(context).camera.center;
