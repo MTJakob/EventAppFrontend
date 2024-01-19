@@ -3,10 +3,8 @@ import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:event_flutter_application/pages/dialogs/password_dialog.dart';
 import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
-import 'package:event_flutter_application/components/data_widget.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:event_flutter_application/components/events_data.dart';
-import 'dart:convert';
-import 'package:flutter_cache_manager/file.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -21,6 +19,14 @@ class _ProfileTabState extends State<ProfileTab> {
   TextEditingController controllerSurname = TextEditingController();
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerBirth = TextEditingController();
+
+  late Future<List<Map<String, dynamic>>> futureEventList;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    futureEventList = AppHttpInterface.of(context).getEventList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,15 +145,13 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
         Flexible(
             fit: FlexFit.tight,
-            child: FutureBuilder(
-                future: MyAppData.of(context).getFile(),
-                builder: (context, AsyncSnapshot<File> snapshot) {
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: futureEventList,
+                builder: (context,
+                    AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
                   if (snapshot.hasData) {
                     return EventsData(
-                      snapshotData: snapshot.data,
-                      eventData: json
-                          .decode(snapshot.data!.readAsStringSync())
-                          .cast<Map<String, dynamic>>(),
+                      eventData: snapshot.data!,
                       child: const EventView(
                         clip: Clip.hardEdge,
                       ),

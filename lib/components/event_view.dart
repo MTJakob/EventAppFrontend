@@ -9,11 +9,10 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> eventsData = EventsData.of(context).eventData;
-
+    int numberOfEntries = EventsData.of(context).eventData.length;
     return AnimatedList(
         clipBehavior: clip,
-        initialItemCount: eventsData.length,
+        initialItemCount: numberOfEntries,
         itemBuilder: (_, index, animation) {
           return EventCard(eventIndex: index);
         });
@@ -30,31 +29,34 @@ class EventCard extends StatefulWidget {
 
 class _EventCardState extends State<EventCard> {
   int? selectedIndex;
+  late Map<String, dynamic> eventInfo;
+  Function? selector;
 
-  bool noneSelected = true;
+  void onTap() {
+    if (selector != null) {
+      selector!(widget.eventIndex,
+          LatLng(eventInfo["Address"]["X"], eventInfo["Address"]["Y"]));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> eventInfo =
-        EventsData.of(context).eventData.elementAt(widget.eventIndex);
-
-    if (EventsData.of(context).selected != null) {
-      selectedIndex = EventsData.of(context).selected!();
-    } else {
-      noneSelected = false;
-    }
+    eventInfo = EventsData.of(context).eventData.elementAt(widget.eventIndex);
+    selector = EventsData.of(context).selector;
+    selectedIndex = EventsData.of(context).selected;
 
     return AnimatedSize(
       duration: Durations.medium1,
       child: Card(
         clipBehavior: Clip.hardEdge,
         child: ListTile(
-          selected: !(widget.eventIndex != selectedIndex && noneSelected),
+          selected: widget.eventIndex == selectedIndex,
           leading: Icon(
             EventsData.eventIcons[eventInfo["Category"]] ?? Icons.event,
             size: 30,
           ),
           title: Text(eventInfo["Name"], softWrap: true),
-          subtitle: widget.eventIndex != selectedIndex && noneSelected
+          subtitle: widget.eventIndex != selectedIndex && selector != null
               ? Text(eventInfo["Date"], softWrap: true)
               : Row(
                   children: [
@@ -105,8 +107,7 @@ class _EventCardState extends State<EventCard> {
                     )
                   ],
                 ),
-          onTap: () => EventsData.of(context).selector!(widget.eventIndex,
-              LatLng(eventInfo["Address"]["X"], eventInfo["Address"]["Y"])),
+          onTap: onTap,
         ),
       ),
     );

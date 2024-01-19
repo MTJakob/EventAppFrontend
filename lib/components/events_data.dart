@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/file.dart';
-import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:collection/collection.dart';
 
 class EventsData extends InheritedWidget {
   const EventsData(
       {required super.child,
       required this.eventData,
       super.key,
-      this.mapControl,
-      this.snapshotData,
       this.selected,
       this.selector});
 
-  final AnimatedMapController? mapControl;
-
-  final File? snapshotData;
-
   final List<Map<String, dynamic>> eventData;
 
-  final Function? selected;
+  final int? selected;
   final Function? selector;
 
   static Map<String, IconData> eventIcons = {
@@ -97,14 +90,16 @@ class EventsData extends InheritedWidget {
   };
 
   @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+  bool updateShouldNotify(EventsData oldWidget) =>
+      !(const DeepCollectionEquality().equals(eventData, oldWidget.eventData) &&
+          selected == oldWidget.selected);
 
   static EventsData? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<EventsData>();
 
   static EventsData of(BuildContext context) {
     final EventsData? result = maybeOf(context);
-    assert(result != null, 'No HomeTabData found');
+    assert(result != null, 'No Data found');
     return result!;
   }
 }

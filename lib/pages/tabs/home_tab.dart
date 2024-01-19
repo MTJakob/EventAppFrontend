@@ -1,11 +1,9 @@
-import 'package:event_flutter_application/components/data_widget.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:event_flutter_application/components/event_map.dart';
 import 'package:event_flutter_application/components/event_view.dart';
 import 'package:event_flutter_application/components/events_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'dart:convert';
-import 'package:flutter_cache_manager/file.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -18,9 +16,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   int? selectedIndex;
+
   MapController controller = MapController();
   late final AnimatedMapController animatedController =
       AnimatedMapController(vsync: this, mapController: controller);
+
+  late Future<List<Map<String, dynamic>>> futureEventList;
 
   void selector(int index, LatLng coordinates) {
     animatedController.animateTo(
@@ -36,25 +37,23 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
     }
   }
 
-  int? selected() {
-    return selectedIndex;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    futureEventList = AppHttpInterface.of(context).getEventList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: MyAppData.of(context).getFile(),
-        builder: (context, AsyncSnapshot<File> snapshot) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+        future: futureEventList,
+        builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
           bool isHorizontal = MediaQuery.of(context).size.aspectRatio > 1;
 
           if (snapshot.hasData && !snapshot.hasError) {
             return EventsData(
-                mapControl: animatedController,
-                snapshotData: snapshot.data,
-                eventData: json
-                    .decode(snapshot.data!.readAsStringSync())
-                    .cast<Map<String, dynamic>>(),
-                selected: selected,
+                eventData: snapshot.data!,
+                selected: selectedIndex,
                 selector: selector,
                 child: Flex(
                     direction: isHorizontal ? Axis.horizontal : Axis.vertical,
@@ -67,13 +66,14 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
                             clip: isHorizontal ? Clip.antiAlias : Clip.none,
                           )),
                       Expanded(
-                          flex: isHorizontal ? 3 : 1, child: const EventMap())
+                          flex: isHorizontal ? 3 : 1,
+                          child: EventMap(
+                            controller: animatedController,
+                          ))
                     ]));
-          } else {
-            return const Align(
-                alignment: Alignment.topCenter,
-                child: LinearProgressIndicator());
           }
+          return const Align(
+              alignment: Alignment.topCenter, child: LinearProgressIndicator());
         });
   }
 }
