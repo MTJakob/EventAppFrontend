@@ -16,8 +16,19 @@ class AppHttpInterface extends InheritedWidget {
     }
   }
 
-  Future<Response> postEvent( Map<String, dynamic> event) async {
+  Future<Response> postEvent(Map<String, dynamic> event) async {
     return post(Uri.parse(host), body: event.toString());
+  }
+
+  Future<List<String>> searchEvents(String input) async {
+    Uri url = Uri(scheme: 'http', host: "192.168.135.137", port: 5000, path: "search", query: input);
+    print(url);
+    final response = await get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body).cast<String>();
+    } else {
+      throw Exception('Failed to get Events');
+    }
   }
 
   @override

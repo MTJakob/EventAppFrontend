@@ -1,15 +1,18 @@
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
 
-class SearchTab extends StatefulWidget {
+class SearchTab extends StatelessWidget {
   const SearchTab({super.key});
 
   @override
-  State<SearchTab> createState() => _SearchTabState();
-}
-
-class _SearchTabState extends State<SearchTab> {
-  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return  FittedBox(
+      child: SearchAnchor.bar(
+        isFullScreen: false,
+          suggestionsBuilder: (context, searchcontroller) async {
+            Future<List<String>> list = AppHttpInterface.of(context).searchEvents(searchcontroller.text);
+             return list.then((value) => List.generate(value.length, (index) =>  ListTile(title: Text(value.elementAt(index)),)));
+          }),
+    );
   }
 }
