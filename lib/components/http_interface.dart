@@ -5,7 +5,7 @@ import 'dart:convert';
 class AppHttpInterface extends InheritedWidget {
   const AppHttpInterface({super.key, required super.child});
 
-  static String host = "http://192.168.135.137:5000";
+  static String host = "http://192.168.125.137:5000";
 
   Future<List<Map<String, dynamic>>> getEventList() async {
     final response = await get(Uri.parse(host));
@@ -21,8 +21,7 @@ class AppHttpInterface extends InheritedWidget {
   }
 
   Future<List<String>> searchEvents(String input) async {
-    Uri url = Uri(scheme: 'http', host: "192.168.135.137", port: 5000, path: "search", query: input);
-    print(url);
+    Uri url = Uri(scheme: 'http', host: "192.168.125.137", port: 5000, path: "search", query: input);
     final response = await get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body).cast<String>();

@@ -100,7 +100,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
               child: Form(
                 key: formKey,
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

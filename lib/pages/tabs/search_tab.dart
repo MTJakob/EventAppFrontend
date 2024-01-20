@@ -6,7 +6,8 @@ class SearchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  FittedBox(
+    return  Align(
+      alignment: Alignment.topCenter,
       child: SearchAnchor.bar(
         isFullScreen: false,
           suggestionsBuilder: (context, searchcontroller) async {

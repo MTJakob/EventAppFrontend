@@ -28,7 +28,7 @@ class NameField extends StatelessWidget {
           controller: controller,
           readOnly: isLocked,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          maxLength: isLocked ? null : 16,
+          maxLength: isLocked ? null : 20,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (String? current) {
             return isAlpha(current!)
