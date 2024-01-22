@@ -11,9 +11,7 @@ class LoginPage extends StatelessWidget {
     TextEditingController pwdController = TextEditingController();
 
     void submit() {
-      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) {
-        return route.toString() == "/";
-      });
+      Navigator.pushNamedAndRemoveUntil(context, '/main', ModalRoute.withName('/'));
     }
 
     return Scaffold(

@@ -29,9 +29,8 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
         //   "Email" : emailController.text,
         //   "DateOfBirth" : dateController.text
         // };
-        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) {
-          return route.toString() == "/";
-        });
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/main', ModalRoute.withName('/'));
       }
     }
 
