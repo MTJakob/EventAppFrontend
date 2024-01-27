@@ -18,6 +18,8 @@ class ManageEventPage extends StatefulWidget {
 class _ManageEventPageState extends State<ManageEventPage> {
   final formKey = GlobalKey<FormState>();
 
+  int? id;
+
   TextEditingController nameController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -35,6 +37,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
   @override
   void initState() {
     if (widget.eventData != null) {
+      id = widget.eventData!.id;
       nameController.text = widget.eventData!.name;
       categoryController.text = widget.eventData!.category ?? "";
       priceController.text =
@@ -69,14 +72,23 @@ class _ManageEventPageState extends State<ManageEventPage> {
                 : int.parse(minutesController.text));
         DateTime start = DateTime.parse(dateController.text);
         Event event = Event(
-            id: null,
+            id: id,
             name: nameController.text,
             price: double.parse(priceController.text),
             capacity: int.parse(capacityController.text),
             category: categoryController.text,
             organiser: AppHttpInterface.of(context).userID.toString(),
             timeRange: DateTimeRange(start: start, end: start.add(duration)));
-        AppHttpInterface.of(context).postEvent(event);
+
+        AppHttpInterface.of(context).placeEvent(event).then((value) {
+          if (value != "") {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(value),
+              duration: const Duration(seconds: 2),
+            ));
+          Navigator.of(context).pop();
+          }
+        });
       }
     }
 
@@ -126,6 +138,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                               suffix: "\$",
                               icon: Icons.price_change,
                               isDense: isHorizontal,
+                              isDouble: true,
                             ),
                             NumberField(
                               controller: capacityController,

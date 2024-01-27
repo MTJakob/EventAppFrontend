@@ -286,12 +286,14 @@ class NumberField extends StatelessWidget {
       required this.controller,
       this.hintText,
       this.isLocked = false,
+      this.isDouble = false,
       this.suffix,
       this.icon,
       this.isDense = false});
   final TextEditingController controller;
   final String? hintText;
   final bool isLocked;
+  final bool isDouble;
   final String? suffix;
   final IconData? icon;
   final bool isDense;
@@ -305,7 +307,9 @@ class NumberField extends StatelessWidget {
         controller: controller,
         readOnly: isLocked,
         validator: (String? current) {
-          return isInt(current!) || current == ""
+          return ((isDouble ? isFloat(current!) : isInt(current!)) ||
+                      current == "") &&
+                  !current.contains("-")
               ? null
               : "Not a valid number!";
         },

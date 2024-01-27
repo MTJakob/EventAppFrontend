@@ -74,10 +74,7 @@ class _EventCardState extends State<EventCard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                            event.price != null
-                                ? '${event.price}\$'
-                                : "Free",
+                        Text(event.price != null ? '${event.price}\$' : "Free",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true),
                         // is admin
@@ -85,8 +82,8 @@ class _EventCardState extends State<EventCard> {
                             ? IconButton(
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
-                                        builder: (context) => ManageEventPage(
-                                            eventData: event))),
+                                        builder: (context) =>
+                                            ManageEventPage(eventData: event))),
                                 icon: const Icon(
                                   Icons.settings,
                                   color: Colors.grey,

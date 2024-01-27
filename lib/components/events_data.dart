@@ -141,14 +141,17 @@ class Event {
   }
 
   String toJson(){
-    return json.encode({
+    Map <String, dynamic> data = {
       'Name': name,
-      //'IDEvent': id,
       'Capacity': capacity,
       'Price': price,
       'StartDateTime': timeRange.start.toIso8601String().split('.')[0],
       'EndDateTime': timeRange.end.toIso8601String().split('.')[0],
       //'eventCategory': category
-    });
+    };
+    if(id != null){
+      data.putIfAbsent("IDEvent", () => id);
+    }
+    return json.encode(data);
   }
 }

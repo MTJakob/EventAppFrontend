@@ -56,16 +56,27 @@ class AppHttpInterface extends InheritedWidget {
     return json.decode(response.body)["message"];
   }
 
-  Future<Response> postEvent(Event event) async {
-    Response response = await post(
+  Future<String> placeEvent(Event event) async {
+    Uri uri = Uri(
+        scheme: scheme,
+        host: host,
+        port: port,
+        pathSegments: ["event", userID.toString()]);
+    Response response = await (event.id == null ? post : put)(uri,
+        headers: {"Content-Type": "application/json"}, body: event.toJson());
+    return json.decode(response.body)["message"];
+  }
+
+  Future<String> deleteEvent(Event event) async {
+    Response response = await delete(
         Uri(
             scheme: scheme,
             host: host,
             port: port,
             pathSegments: ["event", userID.toString()]),
         headers: {"Content-Type": "application/json"},
-        body: event.toJson());
-    return response;
+        body: json.encode({"IDEvent": event.id}));
+      return json.decode(response.body)["message"];
   }
 
   Future<List<Event>> getEventList() async {
