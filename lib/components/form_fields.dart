@@ -79,13 +79,13 @@ class EmailField extends StatelessWidget {
 class PasswordField extends StatelessWidget {
   const PasswordField(
       {super.key,
-      required this.controller,
+      this.controller,
       this.hintText = "Password",
       this.isLocked = false,
       this.firstField,
       this.showPolicy = false,
       this.isDense = false});
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final bool isLocked;
   final TextEditingController? firstField;

@@ -1,12 +1,11 @@
-import 'package:event_flutter_application/pages/login_page.dart';
-import 'package:event_flutter_application/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
 class AppHttpInterface extends InheritedWidget {
   const AppHttpInterface(
-      {super.key, required super.child, this.userID, required Function setID}) : _setID = setID;
+      {super.key, required super.child, this.userID, required Function setID})
+      : _setID = setID;
 
   final int? userID;
 
@@ -33,8 +32,27 @@ class AppHttpInterface extends InheritedWidget {
     }
   }
 
-  void logOut(){
+  void logOut() {
     _setID(null);
+  }
+
+  Future<String> register(
+      {required String email,
+      required String name,
+      required String surname,
+      required String dateOfBirth,
+      required String password}) async {
+    Response response = await post(
+        Uri(scheme: scheme, host: host, port: port, path: "register"),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "Email": email,
+          "Name": name,
+          "Surname": surname,
+          "DateOfBirth": dateOfBirth,
+          "Password": password
+        }));
+    return json.decode(response.body)["message"];
   }
 
   //wip
@@ -72,32 +90,7 @@ class AppHttpInterface extends InheritedWidget {
 
   static AppHttpInterface of(BuildContext context) {
     final AppHttpInterface? result = maybeOf(context);
-    assert(result != null, 'No MyAppData found');
+    assert(result != null, 'No AppHttpInterface found');
     return result!;
-  }
-}
-
-class Pages extends StatefulWidget {
-  const Pages({super.key});
-
-  @override
-  State<Pages> createState() => _PagesState();
-}
-
-class _PagesState extends State<Pages> {
-  int? userID;
-
-  void setID(int? id) {
-    setState(() {
-      userID = id;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppHttpInterface(
-        setID: setID,
-        userID: userID,
-        child: userID == null ? const LoginPage() : const MainPage());
   }
 }

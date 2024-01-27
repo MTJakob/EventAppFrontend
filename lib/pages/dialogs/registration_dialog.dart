@@ -1,4 +1,5 @@
 import 'package:event_flutter_application/components/form_fields.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationDialog extends StatefulWidget {
@@ -23,14 +24,16 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
 
     void submit() {
       if (formKey.currentState!.validate()) {
-        // Map <String, String> formData = {
-        //   "Name" : nameController.text,
-        //   "Surname" : surnameController.text,
-        //   "Email" : emailController.text,
-        //   "DateOfBirth" : dateController.text
-        // };
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/main', ModalRoute.withName('/'));
+        AppHttpInterface.of(context)
+            .register(
+                email: emailController.text,
+                name: nameController.text,
+                surname: surnameController.text,
+                dateOfBirth: dateController.text,
+                password: passwordController.text)
+            .then((value) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(value))));
+        Navigator.pop(context);
       }
     }
 
@@ -60,12 +63,15 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
                   controller: surnameController,
                   hintText: "Surname",
                   isDense: isHorizontal),
+              BirthdayField(controller: dateController, isDense: isHorizontal),
               EmailField(controller: emailController, isDense: isHorizontal),
               PasswordField(
                   controller: passwordController,
                   showPolicy: true,
                   isDense: isHorizontal),
-              BirthdayField(controller: dateController, isDense: isHorizontal)
+              PasswordField(hintText: "Repeat Password",
+                  firstField: passwordController,
+                  isDense: isHorizontal)
             ],
           ),
         ),
