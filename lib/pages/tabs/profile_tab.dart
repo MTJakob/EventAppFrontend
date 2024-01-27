@@ -20,7 +20,7 @@ class _ProfileTabState extends State<ProfileTab> {
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerBirth = TextEditingController();
 
-  late Future<List<Map<String, dynamic>>> futureEventList;
+  late Future<List<Event>> futureEventList;
 
   @override
   void didChangeDependencies() {
@@ -143,10 +143,10 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
         Flexible(
             fit: FlexFit.tight,
-            child: FutureBuilder<List<Map<String, dynamic>>>(
+            child: FutureBuilder<List<Event>>(
                 future: futureEventList,
                 builder: (context,
-                    AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                    AsyncSnapshot<List<Event>> snapshot) {
                   if (snapshot.hasData) {
                     return EventsData(
                       eventData: snapshot.data!,

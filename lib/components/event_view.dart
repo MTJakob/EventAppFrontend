@@ -29,19 +29,19 @@ class EventCard extends StatefulWidget {
 
 class _EventCardState extends State<EventCard> {
   int? selectedIndex;
-  late Map<String, dynamic> eventInfo;
+  late Event event;
   Function? selector;
 
   void onTap() {
-    if (selector != null) {
-      selector!(widget.eventIndex,
-          LatLng(eventInfo["Address"]["X"], eventInfo["Address"]["Y"]));
-    }
+    // if (selector != null) {
+    //   selector!(widget.eventIndex,
+    //       LatLng(eventInfo["Address"]["X"], eventInfo["Address"]["Y"]));
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    eventInfo = EventsData.of(context).eventData.elementAt(widget.eventIndex);
+    event = EventsData.of(context).eventData.elementAt(widget.eventIndex);
     selector = EventsData.of(context).selector;
     selectedIndex = EventsData.of(context).selected;
 
@@ -52,22 +52,22 @@ class _EventCardState extends State<EventCard> {
         child: ListTile(
           selected: widget.eventIndex == selectedIndex,
           leading: Icon(
-            EventsData.eventIcons[eventInfo["Category"]] ?? Icons.event,
+            EventsData.eventIcons[event.category] ?? Icons.event,
             size: 30,
           ),
-          title: Text(eventInfo["Name"], softWrap: true),
+          title: Text(event.name, softWrap: true),
           subtitle: widget.eventIndex != selectedIndex && selector != null
-              ? Text(eventInfo["Date"], softWrap: true)
+              ? Text(event.timeRange.start.toString(), softWrap: true)
               : Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(eventInfo["Date"], softWrap: true),
-                        Text(
-                            '${eventInfo["Address"]["X"]}, ${eventInfo["Address"]["Y"]}',
+                        Text(event.timeRange.start.toString(), softWrap: true),
+                        Text('assa',
+                            //'${event["Address"]["X"]}, ${event["Address"]["Y"]}',
                             softWrap: true),
-                        Text(eventInfo["Organiser"], softWrap: true)
+                        Text(event.organiser ?? "", softWrap: true)
                       ],
                     ),
                     const Spacer(),
@@ -75,8 +75,8 @@ class _EventCardState extends State<EventCard> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                            eventInfo["Price"] != null
-                                ? '${eventInfo["Price"]}\$'
+                            event.price != null
+                                ? '${event.price}\$'
                                 : "Free",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true),
@@ -86,7 +86,7 @@ class _EventCardState extends State<EventCard> {
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) => ManageEventPage(
-                                            eventData: eventInfo))),
+                                            eventData: event))),
                                 icon: const Icon(
                                   Icons.settings,
                                   color: Colors.grey,

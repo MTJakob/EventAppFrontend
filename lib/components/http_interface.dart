@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/components/events_data.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -12,7 +13,7 @@ class AppHttpInterface extends InheritedWidget {
   final Function _setID;
 
   static String scheme = 'http';
-  static String host = "192.168.157.137";
+  static String host = "192.168.221.137";
   static int port = 5000;
 
   Future<String?> login(String email, String password) async {
@@ -55,20 +56,35 @@ class AppHttpInterface extends InheritedWidget {
     return json.decode(response.body)["message"];
   }
 
-  //wip
-  Future<List<Map<String, dynamic>>> getEventList() async {
-    final response = await get(Uri(scheme: scheme, host: host, port: port));
+  Future<Response> postEvent(Event event) async {
+    Response response = await post(
+        Uri(
+            scheme: scheme,
+            host: host,
+            port: port,
+            pathSegments: ["event", userID.toString()]),
+        headers: {"Content-Type": "application/json"},
+        body: event.toJson());
+    return response;
+  }
+
+  Future<List<Event>> getEventList() async {
+    final response = await get(Uri(
+        scheme: scheme,
+        host: host,
+        port: port,
+        pathSegments: ["event", userID.toString()]));
     if (response.statusCode == 200) {
-      return json.decode(response.body).cast<Map<String, dynamic>>();
+      List list = json.decode(response.body);
+      List<Event> events =
+          list.map((element) => Event.fromJson(element)).toList();
+      return events;
     } else {
       throw Exception('Failed to get Events');
     }
   }
 
-  Future<Response> postEvent(Map<String, dynamic> event) async {
-    return post(Uri(scheme: scheme, host: host, port: port));
-  }
-
+  //wip
   Future<List<String>> searchEvents(String input) async {
     Uri url = Uri(
         scheme: scheme, host: host, port: port, path: "search", query: input);

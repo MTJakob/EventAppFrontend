@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'dart:convert';
 
 class EventsData extends InheritedWidget {
   const EventsData(
@@ -9,7 +10,7 @@ class EventsData extends InheritedWidget {
       this.selected,
       this.selector});
 
-  final List<Map<String, dynamic>> eventData;
+  final List<Event> eventData;
 
   final int? selected;
   final Function? selector;
@@ -90,8 +91,8 @@ class EventsData extends InheritedWidget {
   };
 
   @override
-  bool updateShouldNotify(EventsData oldWidget) =>
-      !(const DeepCollectionEquality().equals(eventData, oldWidget.eventData) &&
+  bool updateShouldNotify(EventsData oldWidget) => 
+      !(const ListEquality().equals(eventData, oldWidget.eventData) &&
           selected == oldWidget.selected);
 
   static EventsData? maybeOf(BuildContext context) =>
@@ -101,5 +102,53 @@ class EventsData extends InheritedWidget {
     final EventsData? result = maybeOf(context);
     assert(result != null, 'No Data found');
     return result!;
+  }
+}
+
+class Event {
+  const Event(
+      {required this.name,
+      this.price,
+      this.capacity,
+      this.category,
+      this.organiser,
+      required this.timeRange,
+      required this.id});
+  final int? id;
+  final String name;
+  final double? price;
+  final int? capacity;
+  final String? category;
+  final DateTimeRange timeRange;
+  final String? organiser;
+
+  factory Event.fromJson(Map<String, dynamic> data) {
+    final String name = data["Name"];
+    final int? id = data["IDEvent"];
+    final int? capacity = data["Capacity"];
+    final double? price = data["Price"];
+    final DateTime start = DateTime.parse(data["StartDateTime"]);
+    final DateTime end = DateTime.parse(data["EndDateTime"]);
+    final String? category = data["eventCategory"];
+  
+    return Event(
+        name: name,
+        timeRange: DateTimeRange(start: start, end: end),
+        id: id,
+        capacity: capacity,
+        price: price,
+        category: category);
+  }
+
+  String toJson(){
+    return json.encode({
+      'Name': name,
+      //'IDEvent': id,
+      'Capacity': capacity,
+      'Price': price,
+      'StartDateTime': timeRange.start.toIso8601String().split('.')[0],
+      'EndDateTime': timeRange.end.toIso8601String().split('.')[0],
+      //'eventCategory': category
+    });
   }
 }

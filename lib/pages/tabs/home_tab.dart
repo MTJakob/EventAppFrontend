@@ -21,7 +21,7 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   late final AnimatedMapController animatedController =
       AnimatedMapController(vsync: this, mapController: controller);
 
-  late Future<List<Map<String, dynamic>>> futureEventList;
+  late Future<List<Event>> futureEventList;
 
   void selector(int index, LatLng coordinates) {
     animatedController.animateTo(
@@ -45,11 +45,10 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
+    return FutureBuilder<List<Event>>(
         future: futureEventList,
-        builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+        builder: (context, AsyncSnapshot<List<Event>> snapshot) {
           bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
-
           if (snapshot.hasData && !snapshot.hasError) {
             return EventsData(
                 eventData: snapshot.data!,
