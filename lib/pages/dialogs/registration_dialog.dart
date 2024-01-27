@@ -31,9 +31,11 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
                 surname: surnameController.text,
                 dateOfBirth: dateController.text,
                 password: passwordController.text)
-            .then((value) => ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(value))));
-        Navigator.pop(context);
+            .then((value) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(value)));
+          Navigator.pop(context);
+        });
       }
     }
 
@@ -69,7 +71,8 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
                   controller: passwordController,
                   showPolicy: true,
                   isDense: isHorizontal),
-              PasswordField(hintText: "Repeat Password",
+              PasswordField(
+                  hintText: "Repeat Password",
                   firstField: passwordController,
                   isDense: isHorizontal)
             ],

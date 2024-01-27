@@ -86,10 +86,20 @@ class _ManageEventPageState extends State<ManageEventPage> {
               content: Text(value),
               duration: const Duration(seconds: 2),
             ));
-          Navigator.of(context).pop();
+            Navigator.of(context).pop();
           }
         });
       }
+    }
+
+    void remove() {
+      AppHttpInterface.of(context)
+          .deleteEvent(widget.eventData!)
+          .then((value) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(value)));
+          Navigator.of(context).popUntil(ModalRoute.withName("/"));
+        });
     }
 
     void changeLocation(LatLng location) {
@@ -102,7 +112,33 @@ class _ManageEventPageState extends State<ManageEventPage> {
           "Manage your event",
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
-        actions: [IconButton(onPressed: submit, icon: const Icon(Icons.check))],
+        actions: [
+          id == null
+              ? const SizedBox.shrink()
+              : IconButton(
+                  onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: const Text(
+                              "Are you sure you want to delete this event?",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: [
+                              OutlinedButton.icon(
+                                onPressed: Navigator.of(context).pop,
+                                label: const Text("No"),
+                                icon: const Icon(Icons.close),
+                              ),
+                              OutlinedButton.icon(
+                                onPressed: remove,
+                                label: const Text("Yes"),
+                                icon: const Icon(Icons.check),
+                              ),
+                            ],
+                          )),
+                  icon: const Icon(Icons.delete_forever)),
+          IconButton(onPressed: submit, icon: const Icon(Icons.check))
+        ],
       ),
       body: Card(
         margin: const EdgeInsets.all(10),
