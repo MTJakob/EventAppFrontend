@@ -36,7 +36,7 @@ class _ProfileTabState extends State<ProfileTab> {
     final formKey = GlobalKey<FormState>();
 
     void logOut() {
-      Navigator.pushNamedAndRemoveUntil(context, '/login', ModalRoute.withName('/'));
+      AppHttpInterface.of(context).logOut();
     }
 
     void lockToggle() {

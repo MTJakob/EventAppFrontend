@@ -1,5 +1,3 @@
-import 'package:event_flutter_application/pages/login_page.dart';
-import 'package:event_flutter_application/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'components/http_interface.dart';
 
@@ -12,25 +10,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppHttpInterface(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Event Manager',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.amber.shade900, brightness: Brightness.dark),
-          useMaterial3: true,
-        ),
-        initialRoute: '/login',
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/main': (context) => const MainPage()
-        },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Event Manager',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+        useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.amber.shade900, brightness: Brightness.dark),
+        useMaterial3: true,
+      ),
+      home: const Pages(),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:event_flutter_application/pages/dialogs/registration_dialog.dart';
 import 'package:event_flutter_application/components/title.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,14 @@ class LoginPage extends StatelessWidget {
     TextEditingController pwdController = TextEditingController();
 
     void submit() {
-      Navigator.pushNamedAndRemoveUntil(context, '/main', ModalRoute.withName('/'));
+      AppHttpInterface.of(context)
+          .login(loginController.text, pwdController.text)
+          .then((value) => value == null
+              ? null
+              : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(value),
+                  duration: const Duration(seconds: 2),
+                )));
     }
 
     return Scaffold(
