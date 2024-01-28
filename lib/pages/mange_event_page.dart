@@ -1,5 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:event_flutter_application/components/events_data.dart';
+import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
@@ -39,17 +39,15 @@ class _ManageEventPageState extends State<ManageEventPage> {
     if (widget.eventData != null) {
       id = widget.eventData!.id;
       nameController.text = widget.eventData!.name;
-      categoryController.text = widget.eventData!.category ?? "";
-      priceController.text =
-          widget.eventData!.price == null ? "" : '${widget.eventData!.price}';
+      categoryController.text = widget.eventData!.category;
+      priceController.text = widget.eventData!.price.toString();
       capacityController.text = widget.eventData!.capacity.toString();
       dateController.text = widget.eventData!.timeRange.start.toString();
       duration = widget.eventData!.timeRange.duration;
       daysController.text = duration.inDays.toString();
       hoursController.text = (duration.inHours % 24).toString();
       minutesController.text = (duration.inMinutes % 60).toString();
-      // coordinates = LatLng(
-      //     widget.eventData!["Address"]["X"], widget.eventData!["Address"]["Y"]);
+      coordinates = widget.eventData!.location;
     }
     super.initState();
   }
@@ -77,7 +75,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
             price: double.parse(priceController.text),
             capacity: int.parse(capacityController.text),
             category: categoryController.text,
-            organiser: AppHttpInterface.of(context).userID.toString(),
+            location: coordinates,
             timeRange: DateTimeRange(start: start, end: start.add(duration)));
 
         AppHttpInterface.of(context).placeEvent(event).then((value) {
@@ -93,13 +91,11 @@ class _ManageEventPageState extends State<ManageEventPage> {
     }
 
     void remove() {
-      AppHttpInterface.of(context)
-          .deleteEvent(widget.eventData!)
-          .then((value) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(value)));
-          Navigator.of(context).popUntil(ModalRoute.withName("/"));
-        });
+      AppHttpInterface.of(context).deleteEvent(widget.eventData!).then((value) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(value)));
+        Navigator.of(context).popUntil(ModalRoute.withName("/"));
+      });
     }
 
     void changeLocation(LatLng location) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'dart:convert';
+import 'package:event_flutter_application/components/data_structures.dart';
 
 class EventsData extends InheritedWidget {
   const EventsData(
@@ -91,7 +91,7 @@ class EventsData extends InheritedWidget {
   };
 
   @override
-  bool updateShouldNotify(EventsData oldWidget) => 
+  bool updateShouldNotify(EventsData oldWidget) =>
       !(const ListEquality().equals(eventData, oldWidget.eventData) &&
           selected == oldWidget.selected);
 
@@ -102,56 +102,5 @@ class EventsData extends InheritedWidget {
     final EventsData? result = maybeOf(context);
     assert(result != null, 'No Data found');
     return result!;
-  }
-}
-
-class Event {
-  const Event(
-      {required this.name,
-      this.price,
-      this.capacity,
-      this.category,
-      this.organiser,
-      required this.timeRange,
-      required this.id});
-  final int? id;
-  final String name;
-  final double? price;
-  final int? capacity;
-  final String? category;
-  final DateTimeRange timeRange;
-  final String? organiser;
-
-  factory Event.fromJson(Map<String, dynamic> data) {
-    final String name = data["Name"];
-    final int? id = data["IDEvent"];
-    final int? capacity = data["Capacity"];
-    final double? price = data["Price"];
-    final DateTime start = DateTime.parse(data["StartDateTime"]);
-    final DateTime end = DateTime.parse(data["EndDateTime"]);
-    final String? category = data["eventCategory"];
-  
-    return Event(
-        name: name,
-        timeRange: DateTimeRange(start: start, end: end),
-        id: id,
-        capacity: capacity,
-        price: price,
-        category: category);
-  }
-
-  String toJson(){
-    Map <String, dynamic> data = {
-      'Name': name,
-      'Capacity': capacity,
-      'Price': price,
-      'StartDateTime': timeRange.start.toIso8601String().split('.')[0],
-      'EndDateTime': timeRange.end.toIso8601String().split('.')[0],
-      //'eventCategory': category
-    };
-    if(id != null){
-      data.putIfAbsent("IDEvent", () => id);
-    }
-    return json.encode(data);
   }
 }

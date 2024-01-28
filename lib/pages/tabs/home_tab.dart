@@ -2,6 +2,7 @@ import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:event_flutter_application/components/event_map.dart';
 import 'package:event_flutter_application/components/event_view.dart';
 import 'package:event_flutter_application/components/events_data.dart';
+import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';

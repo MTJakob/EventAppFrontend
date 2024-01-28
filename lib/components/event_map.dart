@@ -1,4 +1,5 @@
 import 'package:event_flutter_application/components/events_data.dart';
+import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
@@ -38,7 +39,7 @@ class _EventMapState extends State<EventMap>
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'eventManager.app',
               ),
-              //const MapMarkers(),
+              const MapMarkers(),
               Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
@@ -50,39 +51,39 @@ class _EventMapState extends State<EventMap>
   }
 }
 
-// class MapMarkers extends StatefulWidget {
-//   const MapMarkers({super.key});
+class MapMarkers extends StatefulWidget {
+  const MapMarkers({super.key});
 
-//   @override
-//   State<MapMarkers> createState() => _MapMarkersState();
-// }
+  @override
+  State<MapMarkers> createState() => _MapMarkersState();
+}
 
-// class _MapMarkersState extends State<MapMarkers> {
-//   int? selectedIndex;
-//   late List<Event> data;
+class _MapMarkersState extends State<MapMarkers> {
+  int? selectedIndex;
+  late List<Event> data;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     data = EventsData.of(context).eventData;
-//     selectedIndex = EventsData.of(context).selected;
-//     return MarkerLayer(
-//         rotate: true,
-//         markers: data.map((e) {
-//           int index = data.indexOf(e);
-//           return Marker(
-//               alignment: const Alignment(0, -0.7),
-//               point: LatLng(e["Address"]["X"], e["Address"]["Y"]),
-//               child: IconButton(
-//                   iconSize: 30,
-//                   padding: const EdgeInsetsDirectional.all(0),
-//                   icon: Icon(
-//                     Icons.place,
-//                     color: selectedIndex == index
-//                         ? Colors.red
-//                         : Theme.of(context).primaryColor,
-//                   ),
-//                   onPressed: () => EventsData.of(context).selector!(
-//                       index, LatLng(e["Address"]["X"], e["Address"]["Y"]))));
-//         }).toList());
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    data = EventsData.of(context).eventData;
+    selectedIndex = EventsData.of(context).selected;
+    return MarkerLayer(
+        rotate: true,
+        markers: data.map((e) {
+          int index = data.indexOf(e);
+          return Marker(
+              alignment: const Alignment(0, -0.7),
+              point: e.location,
+              child: IconButton(
+                  iconSize: 30,
+                  padding: const EdgeInsetsDirectional.all(0),
+                  icon: Icon(
+                    Icons.place,
+                    color: selectedIndex == index
+                        ? Colors.red
+                        : Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () =>
+                      EventsData.of(context).selector!(index, e.location)));
+        }).toList());
+  }
+}

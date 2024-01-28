@@ -1,10 +1,11 @@
 import 'package:event_flutter_application/components/event_view.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
+import 'package:event_flutter_application/components/events_data.dart';
+import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:event_flutter_application/pages/dialogs/password_dialog.dart';
 import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
-import 'package:event_flutter_application/components/http_interface.dart';
-import 'package:event_flutter_application/components/events_data.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
