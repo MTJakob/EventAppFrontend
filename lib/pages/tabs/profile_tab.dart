@@ -6,6 +6,7 @@ import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:event_flutter_application/pages/dialogs/password_dialog.dart';
 import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -28,6 +29,13 @@ class _ProfileTabState extends State<ProfileTab> {
 
     final formKey = GlobalKey<FormState>();
 
+    AppHttpInterface.of(context).getUser().then((user) {
+      controllerName.text = user.name;
+      controllerSurname.text = user.surname;
+      controllerEmail.text = user.email!;
+      controllerBirth.text = user.birthday!.toIso8601String().split("T")[0];
+    });
+
     void logOut() {
       AppHttpInterface.of(context).logOut();
     }
@@ -37,11 +45,6 @@ class _ProfileTabState extends State<ProfileTab> {
         isLocked = !isLocked;
       });
     }
-
-    controllerName.text = "Name";
-    controllerSurname.text = "Surname";
-    controllerEmail.text = "xyz@gmail.com";
-    controllerBirth.text = "2000-10-02";
 
     return Flex(
       direction: isHorizontal ? Axis.horizontal : Axis.vertical,
@@ -122,7 +125,25 @@ class _ProfileTabState extends State<ProfileTab> {
                                 avatar: const Icon(Icons.check),
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    lockToggle();
+                                    AppHttpInterface.of(context)
+                                        .register(
+                                      User(
+                                        name: controllerName.text,
+                                        surname: controllerSurname.text,
+                                        email: controllerEmail.text,
+                                        birthday: DateTime.parse(
+                                            controllerBirth.text),
+                                      ),
+                                    )
+                                        .then((response) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(json.decode(
+                                                  response.body)["message"])));
+                                      if (response.statusCode == 201) {
+                                        lockToggle();
+                                      }
+                                    });
                                   }
                                 },
                               ),
@@ -137,7 +158,8 @@ class _ProfileTabState extends State<ProfileTab> {
         Flexible(
             fit: FlexFit.tight,
             child: FutureBuilder<List<Event>>(
-                future: AppHttpInterface.of(context).getEventList(),
+                future: AppHttpInterface.of(context)
+                    .getEventList(isParticipant: false),
                 builder: (context, AsyncSnapshot<List<Event>> snapshot) {
                   if (snapshot.hasData) {
                     return EventsData(

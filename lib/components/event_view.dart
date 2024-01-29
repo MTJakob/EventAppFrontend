@@ -36,11 +36,18 @@ class _EventCardState extends State<EventCard> {
   int? selectedIndex;
   late Event event;
   Function? selector;
+  late bool isAttending;
 
   void onTap() {
     if (selector != null) {
       selector!(widget.eventIndex, event.location);
     }
+  }
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    isAttending = EventsData.of(context).isAttending;
   }
 
   @override
@@ -104,16 +111,19 @@ class _EventCardState extends State<EventCard> {
                                 ))
                             : IconButton(
                                 icon: const Icon(Icons.favorite),
-                                color:
-                                    true // later a reference to events liked by the user
-                                        ? Colors.red
-                                        : Theme.of(context).disabledColor,
-                                onPressed: () {
-                                  setState(() {
-                                    // later adds / removes the event from liked
-                                  });
-                                },
-                              ),
+                                color: isAttending
+                                    ? Colors.red
+                                    : Theme.of(context).disabledColor,
+                                onPressed: () => AppHttpInterface.of(context)
+                                        .toggleAttending(event, isAttending)
+                                        .then((response) {
+                                      if (response.statusCode == 200 ||
+                                          response.statusCode == 202) {
+                                        setState(() {
+                                          isAttending = !isAttending;
+                                        });
+                                      }
+                                    })),
                       ],
                     )
                   ],

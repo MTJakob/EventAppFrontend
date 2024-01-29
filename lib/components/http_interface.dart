@@ -17,9 +17,11 @@ class AppHttpInterface extends InheritedWidget {
   static int port = 5000;
   static Uri uri = Uri(scheme: scheme, host: host, port: port);
 
+  static Map<String, String> headers = {"Content-Type": "application/json"};
+
   Future<String?> login(String email, String password) async {
     Response response = await post(uri.replace(path: "login"),
-        headers: {"Content-Type": "application/json"},
+        headers: headers,
         body: json.encode({"Email": email, "Password": password}));
     dynamic body = json.decode(response.body);
     switch (response.statusCode) {
@@ -33,32 +35,55 @@ class AppHttpInterface extends InheritedWidget {
     }
   }
 
+  Future<Response> changePassword(String newPwd, String oldPwd) async {
+    Response response = await put(uri.replace(path: "login"),
+        headers: headers,
+        body: json.encode(
+            {"PasswordOld": oldPwd, "PasswordNew": newPwd, "IDUser": userID}));
+    return response;
+  }
+
   void logOut() {
     _setID(null);
   }
 
-  Future<Response> register(
-      {required String email,
-      required String name,
-      required String surname,
-      required String dateOfBirth,
-      required String password}) async {
+  Future<Response> register(User user) async {
     Response response = await post(uri.replace(path: "register"),
-        headers: {"Content-Type": "application/json"},
-        body: json.encode({
-          "Email": email,
-          "Name": name,
-          "Surname": surname,
-          "DateOfBirth": dateOfBirth,
-          "Password": password
-        }));
+        headers: headers, body: user.toJson());
+    return response;
+  }
+
+  Future<Response> updateUser(User user) async {
+    Response response = await put(
+        uri.replace(pathSegments: ["user", userID.toString()]),
+        headers: headers,
+        body: user.toJson());
+    return response;
+  }
+
+  Future<User> getUser() async {
+    Response response =
+        await get(uri.replace(pathSegments: ["user", userID.toString()]));
+    if (response.statusCode == 200) {
+      User user = User.fromJson(json.decode(response.body));
+      return user;
+    } else {
+      throw Exception("Error ${response.statusCode}: ${response.body}");
+    }
+  }
+
+  Future<Response> toggleAttending(Event event, bool isAttending) async {
+    Response response = await (isAttending ? delete : post)(
+        uri.replace(pathSegments: ["event participant", userID.toString()]),
+        headers: headers,
+        body: json.encode({"IDEvent": event.id}));
     return response;
   }
 
   Future<Response> placeEvent(Event event) async {
     Response response = await (event.id == null ? post : put)(
         uri.replace(pathSegments: ["event", userID.toString()]),
-        headers: {"Content-Type": "application/json"},
+        headers: headers,
         body: event.toJson());
     return response;
   }
@@ -66,21 +91,23 @@ class AppHttpInterface extends InheritedWidget {
   Future<Response> deleteEvent(Event event) async {
     Response response = await delete(
         uri.replace(pathSegments: ["event", userID.toString()]),
-        headers: {"Content-Type": "application/json"},
+        headers: headers,
         body: json.encode({"IDEvent": event.id}));
     return response;
   }
 
-  Future<List<Event>> getEventList() async {
-    Response response =
-        await get(uri.replace(pathSegments: ["event", userID.toString()]));
+  Future<List<Event>> getEventList({bool isParticipant = true}) async {
+    Response response = await get(uri.replace(pathSegments: [
+      isParticipant ? "event participant" : "event",
+      userID.toString()
+    ]));
     if (response.statusCode == 200) {
       List list = json.decode(response.body);
       List<Event> events =
           list.map((element) => Event.fromJson(element)).toList();
       return events;
     } else {
-      throw Exception('Failed to get Events');
+      throw Exception("Error ${response.statusCode}: ${response.body}");
     }
   }
 
@@ -90,7 +117,7 @@ class AppHttpInterface extends InheritedWidget {
     if (response.statusCode == 200) {
       return json.decode(response.body).cast<String>();
     } else {
-      throw Exception('Failed to get Events');
+      throw Exception("Error ${response.statusCode}: ${response.body}");
     }
   }
   //

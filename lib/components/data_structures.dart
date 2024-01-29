@@ -73,24 +73,27 @@ class Event {
 
 class User {
   const User(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.surname,
       this.email,
-      this.birthday});
-  final int id;
+      this.birthday,
+      this.password});
+  final int? id;
   final String name;
   final String surname;
   final String? email;
   final DateTime? birthday;
+  final String? password;
 
   factory User.fromJson(Map<String, dynamic> data) {
     if (data
         case {
-          'IDUser': int id,
           'Name': String name,
           'Surname': String surname,
         }) {
+      final String? password = data["Password"];
+      final int? id = data["IDUser"];
       final String? email = data["Email"];
       final DateTime? birthday = DateTime.tryParse(data["DateOfBirth"] ?? "");
       return User(
@@ -98,7 +101,8 @@ class User {
           name: name,
           surname: surname,
           email: email,
-          birthday: birthday);
+          birthday: birthday,
+          password: password);
     } else {
       throw FormatException('Invalid User JSON: $data');
     }
@@ -106,12 +110,13 @@ class User {
 
   String toJson() {
     Map<String, dynamic> data = {
-      'IDUser': id,
       'Name': name,
       'Surname': surname,
+      if (id != null) 'IDUser': id,
       if (email != null) 'Email': email,
       if (birthday != null)
-        'DateOfBirth': birthday!.toIso8601String().split('T')[0]
+        'DateOfBirth': birthday!.toIso8601String().split('T')[0],
+      if (password != null) 'Password': password
     };
     return json.encode(data);
   }

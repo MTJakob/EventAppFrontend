@@ -1,5 +1,7 @@
 import 'package:event_flutter_application/components/form_fields.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class PasswordDialog extends StatefulWidget {
   const PasswordDialog({super.key});
@@ -21,7 +23,13 @@ class _PasswordDialogState extends State<PasswordDialog> {
 
     void submit() {
       if (formKey.currentState!.validate()) {
-        Navigator.pop(context);
+        AppHttpInterface.of(context)
+            .changePassword(newPwd.text, oldPwd.text)
+            .then((response) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(json.decode(response.body)["message"])));
+          if (response.statusCode == 201) Navigator.pop(context);
+        });
       }
     }
 

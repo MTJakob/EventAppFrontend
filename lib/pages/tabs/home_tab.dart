@@ -40,13 +40,14 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
     return FutureBuilder<List<Event>>(
-        future: AppHttpInterface.of(context).getEventList(),
+        future: AppHttpInterface.of(context).getEventList(isParticipant: true),
         builder: (context, AsyncSnapshot<List<Event>> snapshot) {
           if (snapshot.hasData) {
             return EventsData(
                 eventData: snapshot.data!,
                 selected: selectedIndex,
                 selector: selector,
+                isAttending: true,
                 child: Flex(
                     direction: isHorizontal ? Axis.horizontal : Axis.vertical,
                     textDirection:

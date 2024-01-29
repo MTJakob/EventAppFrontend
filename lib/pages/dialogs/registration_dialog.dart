@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +28,13 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
       if (formKey.currentState!.validate()) {
         AppHttpInterface.of(context)
             .register(
-                email: emailController.text,
-                name: nameController.text,
-                surname: surnameController.text,
-                dateOfBirth: dateController.text,
-                password: passwordController.text)
+          User(
+              name: nameController.text,
+              surname: surnameController.text,
+              email: emailController.text,
+              birthday: DateTime.parse(dateController.text),
+              password: passwordController.text),
+        )
             .then((response) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(json.decode(response.body)["message"])));

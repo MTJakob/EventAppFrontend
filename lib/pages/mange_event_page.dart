@@ -77,7 +77,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
             price: double.parse(priceController.text),
             capacity: int.parse(capacityController.text),
             category: categoryController.text,
-            location: coordinates!,
+            location: coordinates,
             timeRange: DateTimeRange(start: start, end: start.add(duration)));
 
         AppHttpInterface.of(context).placeEvent(event).then((response) {

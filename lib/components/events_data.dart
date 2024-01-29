@@ -8,12 +8,15 @@ class EventsData extends InheritedWidget {
       required this.eventData,
       super.key,
       this.selected,
-      this.selector});
+      this.selector,
+      this.isAttending = false});
 
   final List<Event> eventData;
 
   final int? selected;
   final Function? selector;
+
+  final bool isAttending;
 
   static Map<String, IconData> eventIcons = {
     //general sports
@@ -92,7 +95,8 @@ class EventsData extends InheritedWidget {
 
   @override
   bool updateShouldNotify(EventsData oldWidget) =>
-      !const ListEquality().equals(eventData, oldWidget.eventData) ||selected != oldWidget.selected;
+      !const ListEquality().equals(eventData, oldWidget.eventData) ||
+      selected != oldWidget.selected;
 
   static EventsData? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<EventsData>();
