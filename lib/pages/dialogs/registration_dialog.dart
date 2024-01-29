@@ -1,6 +1,7 @@
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class RegistrationDialog extends StatefulWidget {
   const RegistrationDialog({super.key});
@@ -31,10 +32,10 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
                 surname: surnameController.text,
                 dateOfBirth: dateController.text,
                 password: passwordController.text)
-            .then((value) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(value)));
-          Navigator.pop(context);
+            .then((response) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(json.decode(response.body)["message"])));
+          if (response.statusCode == 201) Navigator.pop(context);
         });
       }
     }

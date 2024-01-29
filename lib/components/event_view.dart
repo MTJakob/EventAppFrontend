@@ -1,19 +1,24 @@
 import 'package:event_flutter_application/components/events_data.dart';
 import 'package:event_flutter_application/components/data_structures.dart';
+import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
 
-class EventView extends StatelessWidget {
-  const EventView({super.key, this.clip = Clip.none});
+class EventView extends StatefulWidget {
+  const EventView({super.key, this.clip = Clip.antiAlias});
   final Clip clip;
 
   @override
+  State<EventView> createState() => _EventViewState();
+}
+
+class _EventViewState extends State<EventView> {
+  @override
   Widget build(BuildContext context) {
-    int numberOfEntries = EventsData.of(context).eventData.length;
-    return AnimatedList(
-        clipBehavior: clip,
-        initialItemCount: numberOfEntries,
-        itemBuilder: (_, index, animation) {
+    return ListView.builder(
+        clipBehavior: widget.clip,
+        itemCount: EventsData.of(context).eventData.length,
+        itemBuilder: (context, index) {
           return EventCard(eventIndex: index);
         });
   }
@@ -54,27 +59,29 @@ class _EventCardState extends State<EventCard> {
             EventsData.eventIcons[event.category] ?? Icons.event,
             size: 30,
           ),
-          title: Text(event.name, softWrap: true),
+          title: Text(event.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              softWrap: true),
           subtitle: widget.eventIndex != selectedIndex && selector != null
               ? Text(event.timeRange.start.toString().substring(0, 16),
                   softWrap: true)
               : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                            "By: ${event.organiser!.name} ${event.organiser!.surname}",
+                            softWrap: true),
+                        Text(
                             "From: ${event.timeRange.start.toString().substring(0, 16)}",
                             softWrap: true),
                         Text(
                             "To:      ${event.timeRange.end.toString().substring(0, 16)}",
-                            softWrap: true),
-                        Text(
-                            "By: ${event.organiser!.name} ${event.organiser!.surname}",
                             softWrap: true)
                       ],
                     ),
-                    const Spacer(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -84,8 +91,8 @@ class _EventCardState extends State<EventCard> {
                         Text('${event.capacity} max',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true),
-                        // is admin
-                        true
+                        event.organiser!.id ==
+                                AppHttpInterface.of(context).userID!
                             ? IconButton(
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(

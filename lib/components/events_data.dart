@@ -92,8 +92,7 @@ class EventsData extends InheritedWidget {
 
   @override
   bool updateShouldNotify(EventsData oldWidget) =>
-      !(const ListEquality().equals(eventData, oldWidget.eventData) &&
-          selected == oldWidget.selected);
+      !const ListEquality().equals(eventData, oldWidget.eventData) ||selected != oldWidget.selected;
 
   static EventsData? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<EventsData>();

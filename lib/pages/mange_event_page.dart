@@ -1,10 +1,12 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:event_flutter_application/components/data_structures.dart';
+import 'package:event_flutter_application/components/event_map.dart';
 import 'package:event_flutter_application/components/http_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:event_flutter_application/components/form_fields.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:validators/validators.dart';
+import 'dart:convert';
 
 class ManageEventPage extends StatefulWidget {
   const ManageEventPage({super.key, this.eventData});
@@ -32,7 +34,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
   TextEditingController minutesController = TextEditingController();
   Duration duration = const Duration();
 
-  LatLng coordinates = const LatLng(0, 0);
+  LatLng coordinates = EventMap.centralPoint;
 
   @override
   void initState() {
@@ -75,26 +77,28 @@ class _ManageEventPageState extends State<ManageEventPage> {
             price: double.parse(priceController.text),
             capacity: int.parse(capacityController.text),
             category: categoryController.text,
-            location: coordinates,
+            location: coordinates!,
             timeRange: DateTimeRange(start: start, end: start.add(duration)));
 
-        AppHttpInterface.of(context).placeEvent(event).then((value) {
-          if (value != "") {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(value),
-              duration: const Duration(seconds: 2),
-            ));
-            Navigator.of(context).pop();
-          }
+        AppHttpInterface.of(context).placeEvent(event).then((response) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(json.decode(response.body)["message"]),
+            duration: const Duration(seconds: 2),
+          ));
+          if (response.statusCode == 201) Navigator.of(context).pop();
         });
       }
     }
 
     void remove() {
-      AppHttpInterface.of(context).deleteEvent(widget.eventData!).then((value) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(value)));
-        Navigator.of(context).popUntil(ModalRoute.withName("/"));
+      AppHttpInterface.of(context)
+          .deleteEvent(widget.eventData!)
+          .then((response) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(json.decode(response.body)["message"])));
+        if (response.statusCode == 202) {
+          Navigator.of(context).popUntil(ModalRoute.withName("/"));
+        }
       });
     }
 
@@ -231,7 +235,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   clipBehavior: Clip.hardEdge,
                   elevation: 10,
-                  child: MapInput(submit: changeLocation)),
+                  child: MapInput(submit: changeLocation, initialCenter: coordinates,)),
             )
           ],
         ),

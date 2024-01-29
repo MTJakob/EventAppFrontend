@@ -22,8 +22,6 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   late final AnimatedMapController animatedController =
       AnimatedMapController(vsync: this, mapController: controller);
 
-  late Future<List<Event>> futureEventList;
-
   void selector(int index, LatLng coordinates) {
     animatedController.animateTo(
         dest: coordinates, zoom: controller.camera.zoom);
@@ -39,18 +37,12 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    futureEventList = AppHttpInterface.of(context).getEventList();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
     return FutureBuilder<List<Event>>(
-        future: futureEventList,
+        future: AppHttpInterface.of(context).getEventList(),
         builder: (context, AsyncSnapshot<List<Event>> snapshot) {
-          bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
-          if (snapshot.hasData && !snapshot.hasError) {
+          if (snapshot.hasData) {
             return EventsData(
                 eventData: snapshot.data!,
                 selected: selectedIndex,
@@ -71,9 +63,11 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
                             controller: animatedController,
                           ))
                     ]));
+          } else {
+            return const Align(
+                alignment: Alignment.topCenter,
+                child: LinearProgressIndicator());
           }
-          return const Align(
-              alignment: Alignment.topCenter, child: LinearProgressIndicator());
         });
   }
 }

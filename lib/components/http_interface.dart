@@ -13,7 +13,7 @@ class AppHttpInterface extends InheritedWidget {
   final Function _setID;
 
   static String scheme = 'http';
-  static String host = "192.168.205.137";
+  static String host = "192.168.73.137";
   static int port = 5000;
   static Uri uri = Uri(scheme: scheme, host: host, port: port);
 
@@ -37,7 +37,7 @@ class AppHttpInterface extends InheritedWidget {
     _setID(null);
   }
 
-  Future<String> register(
+  Future<Response> register(
       {required String email,
       required String name,
       required String surname,
@@ -52,23 +52,23 @@ class AppHttpInterface extends InheritedWidget {
           "DateOfBirth": dateOfBirth,
           "Password": password
         }));
-    return json.decode(response.body)["message"];
+    return response;
   }
 
-  Future<String> placeEvent(Event event) async {
+  Future<Response> placeEvent(Event event) async {
     Response response = await (event.id == null ? post : put)(
         uri.replace(pathSegments: ["event", userID.toString()]),
         headers: {"Content-Type": "application/json"},
         body: event.toJson());
-    return json.decode(response.body)["message"];
+    return response;
   }
 
-  Future<String> deleteEvent(Event event) async {
+  Future<Response> deleteEvent(Event event) async {
     Response response = await delete(
         uri.replace(pathSegments: ["event", userID.toString()]),
         headers: {"Content-Type": "application/json"},
         body: json.encode({"IDEvent": event.id}));
-    return json.decode(response.body)["message"];
+    return response;
   }
 
   Future<List<Event>> getEventList() async {

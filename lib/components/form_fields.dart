@@ -1,3 +1,4 @@
+import 'package:event_flutter_application/components/event_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
@@ -326,15 +327,21 @@ class NumberField extends StatelessWidget {
 }
 
 class MapInput extends StatefulWidget {
-  const MapInput({super.key, this.submit});
+  const MapInput({super.key, this.submit, this.initialCenter});
   final Function? submit;
+  final LatLng? initialCenter;
 
   @override
   State<MapInput> createState() => _MapInputState();
 }
 
 class _MapInputState extends State<MapInput> with TickerProviderStateMixin {
-  LatLng pointer = const LatLng(0, 0);
+  LatLng? pointer;
+  @override
+  void initState() {
+    pointer = widget.initialCenter ?? EventMap.centralPoint;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -342,9 +349,9 @@ class _MapInputState extends State<MapInput> with TickerProviderStateMixin {
         AnimatedMapController(vsync: this);
     return FlutterMap(
         mapController: animatedController.mapController,
-        options: const MapOptions(
+        options: MapOptions(
             keepAlive: true,
-            initialCenter: LatLng(38.1858, 15.5561),
+            initialCenter: pointer!,
             initialZoom: 16),
         children: [
           TileLayer(
@@ -354,15 +361,12 @@ class _MapInputState extends State<MapInput> with TickerProviderStateMixin {
           MarkerLayer(rotate: true, markers: [
             Marker(
                 alignment: const Alignment(-0.7, -2),
-                point: pointer,
-                child: IconButton(
-                    iconSize: 50,
-                    padding: const EdgeInsetsDirectional.all(0),
-                    icon: Icon(
-                      Icons.place,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () => ()))
+                point: pointer!,
+                child: Icon(
+                  Icons.place,
+                  size: 50,
+                  color: Theme.of(context).primaryColor,
+                ))
           ]),
           Builder(builder: (context) {
             return Center(

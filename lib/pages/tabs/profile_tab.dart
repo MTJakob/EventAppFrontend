@@ -21,14 +21,6 @@ class _ProfileTabState extends State<ProfileTab> {
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerBirth = TextEditingController();
 
-  late Future<List<Event>> futureEventList;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    futureEventList = AppHttpInterface.of(context).getEventList();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -145,15 +137,12 @@ class _ProfileTabState extends State<ProfileTab> {
         Flexible(
             fit: FlexFit.tight,
             child: FutureBuilder<List<Event>>(
-                future: futureEventList,
-                builder: (context,
-                    AsyncSnapshot<List<Event>> snapshot) {
+                future: AppHttpInterface.of(context).getEventList(),
+                builder: (context, AsyncSnapshot<List<Event>> snapshot) {
                   if (snapshot.hasData) {
                     return EventsData(
                       eventData: snapshot.data!,
-                      child: const EventView(
-                        clip: Clip.hardEdge,
-                      ),
+                      child: const EventView(),
                     );
                   } else {
                     return const Align(
