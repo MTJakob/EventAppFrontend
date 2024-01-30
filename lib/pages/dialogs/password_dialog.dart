@@ -28,7 +28,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
             .then((response) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(json.decode(response.body)["message"])));
-          if (response.statusCode == 201) Navigator.pop(context);
+          if (response.statusCode == 200) Navigator.pop(context);
         });
       }
     }

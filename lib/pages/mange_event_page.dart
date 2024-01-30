@@ -85,7 +85,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
             content: Text(json.decode(response.body)["message"]),
             duration: const Duration(seconds: 2),
           ));
-          if (response.statusCode == 201) Navigator.of(context).pop();
+          if (response.statusCode == 201 || response.statusCode == 200) {
+            Navigator.of(context).pop();
+          }
         });
       }
     }
@@ -235,7 +237,10 @@ class _ManageEventPageState extends State<ManageEventPage> {
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   clipBehavior: Clip.hardEdge,
                   elevation: 10,
-                  child: MapInput(submit: changeLocation, initialCenter: coordinates,)),
+                  child: MapInput(
+                    submit: changeLocation,
+                    initialCenter: coordinates,
+                  )),
             )
           ],
         ),

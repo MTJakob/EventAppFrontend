@@ -140,7 +140,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                           .showSnackBar(SnackBar(
                                               content: Text(json.decode(
                                                   response.body)["message"])));
-                                      if (response.statusCode == 201) {
+                                      if (response.statusCode == 200) {
                                         lockToggle();
                                       }
                                     });
