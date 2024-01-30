@@ -46,8 +46,14 @@ class _SearchTabState extends State<SearchTab> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      SearchBar(
-        onChanged: (value) => search(value),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SearchBar(
+          padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+          hintText: "Search...",
+          leading: const Icon(Icons.search),
+          onChanged: (value) => search(value),
+        ),
       ),
       Flexible(
           fit: FlexFit.tight,
