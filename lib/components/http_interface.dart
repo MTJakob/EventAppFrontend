@@ -13,7 +13,7 @@ class AppHttpInterface extends InheritedWidget {
   final Function _setID;
 
   static String scheme = 'http';
-  static String host = "192.168.73.137";
+  static String host = "192.168.110.137";
   static int port = 5000;
   static Uri uri = Uri(scheme: scheme, host: host, port: port);
 
@@ -39,7 +39,7 @@ class AppHttpInterface extends InheritedWidget {
     Response response = await put(uri.replace(path: "login"),
         headers: headers,
         body: json.encode(
-            {"PasswordOld": oldPwd, "PasswordNew": newPwd, "IDUser": userID}));
+            {"OldPassword": oldPwd, "NewPassword": newPwd, "IDUser": userID}));
     return response;
   }
 
