@@ -39,36 +39,42 @@ class _HomeTabState extends State<HomeTab> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     bool isHorizontal = MediaQuery.sizeOf(context).aspectRatio > 1;
-    return FutureBuilder<List<Event>>(
-        future: AppHttpInterface.of(context).getEventList(isParticipant: true),
-        builder: (context, AsyncSnapshot<List<Event>> snapshot) {
-          if (snapshot.hasData) {
-            return EventsData(
-                eventData: snapshot.data!,
-                selected: selectedIndex,
-                selector: selector,
-                isAttending: true,
-                child: Flex(
-                    direction: isHorizontal ? Axis.horizontal : Axis.vertical,
-                    textDirection:
-                        isHorizontal ? TextDirection.rtl : TextDirection.ltr,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: EventView(
-                            clip: isHorizontal ? Clip.antiAlias : Clip.none,
-                          )),
-                      Expanded(
-                          flex: isHorizontal ? 3 : 1,
-                          child: EventMap(
-                            controller: animatedController,
-                          ))
-                    ]));
-          } else {
-            return const Align(
-                alignment: Alignment.topCenter,
-                child: LinearProgressIndicator());
-          }
-        });
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: FutureBuilder<List<Event>>(
+          future:
+              AppHttpInterface.of(context).getEventList(isParticipant: true),
+          builder: (context, AsyncSnapshot<List<Event>> snapshot) {
+            if (snapshot.hasData) {
+              return EventsData(
+                  eventData: snapshot.data!,
+                  selected: selectedIndex,
+                  selector: selector,
+                  isAttending: true,
+                  child: Flex(
+                      direction: isHorizontal ? Axis.horizontal : Axis.vertical,
+                      textDirection:
+                          isHorizontal ? TextDirection.rtl : TextDirection.ltr,
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: EventView(
+                              clip: isHorizontal ? Clip.antiAlias : Clip.none,
+                            )),
+                        Expanded(
+                            flex: isHorizontal ? 3 : 1,
+                            child: EventMap(
+                              controller: animatedController,
+                            ))
+                      ]));
+            } else {
+              return const Align(
+                  alignment: Alignment.topCenter,
+                  child: LinearProgressIndicator());
+            }
+          }),
+    );
   }
 }

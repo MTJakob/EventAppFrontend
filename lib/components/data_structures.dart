@@ -28,7 +28,7 @@ class Event {
           'Name': String name,
           'Capacity': int capacity,
           'Price': double price,
-          //'eventCategory': Map<String, dynamic> eventCategory,
+          'eventCategory': Map<String, dynamic> eventCategory,
           'eventAddress': Map<String, dynamic> eventAddress,
         }) {
       final DateTimeRange range = DateTimeRange(
@@ -44,7 +44,7 @@ class Event {
           price: price,
           capacity: capacity,
           timeRange: range,
-          category: "Outdoor", //eventCategory["Name"],
+          category: eventCategory["Name"],
           location: LatLng(eventAddress["Latitude"], eventAddress["Longitude"]),
           organiser: organiser);
     } else {

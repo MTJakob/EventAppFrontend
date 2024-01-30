@@ -157,21 +157,25 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
         Flexible(
             fit: FlexFit.tight,
-            child: FutureBuilder<List<Event>>(
-                future: AppHttpInterface.of(context)
-                    .getEventList(isParticipant: false),
-                builder: (context, AsyncSnapshot<List<Event>> snapshot) {
-                  if (snapshot.hasData) {
-                    return EventsData(
-                      eventData: snapshot.data!,
-                      child: const EventView(),
-                    );
-                  } else {
-                    return const Align(
-                        alignment: Alignment.topCenter,
-                        child: LinearProgressIndicator());
-                  }
-                }))
+            child: RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {});
+                },
+                child: FutureBuilder<List<Event>>(
+                    future: AppHttpInterface.of(context)
+                        .getEventList(isParticipant: false),
+                    builder: (context, AsyncSnapshot<List<Event>> snapshot) {
+                      if (snapshot.hasData) {
+                        return EventsData(
+                          eventData: snapshot.data!,
+                          child: const EventView(),
+                        );
+                      } else {
+                        return const Align(
+                            alignment: Alignment.topCenter,
+                            child: LinearProgressIndicator());
+                      }
+                    })))
       ],
     );
   }
