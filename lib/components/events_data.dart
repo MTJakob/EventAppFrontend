@@ -34,7 +34,6 @@ class EventsData extends InheritedWidget {
     "Cycling": Icons.pedal_bike,
     "Running": Icons.directions_run,
     "Golf": Icons.golf_course,
-    "Fishing": Icons.phishing,
     "IceSkating": Icons.ice_skating,
     //water sports
     "Diving": Icons.scuba_diving,
@@ -52,9 +51,7 @@ class EventsData extends InheritedWidget {
     "Photography": Icons.camera,
     "Movie": Icons.local_movies,
     "Theatre": Icons.theater_comedy,
-    //music
     "Music": Icons.music_note,
-    "Party": Icons.nightlife,
     //food
     "Food": Icons.fastfood,
     "Baking": Icons.cookie,
@@ -69,6 +66,7 @@ class EventsData extends InheritedWidget {
     "Grill": Icons.outdoor_grill,
     "Event": Icons.celebration,
     "Meetup": Icons.handshake,
+    "Party": Icons.nightlife,
     //fair
     "Fair": Icons.attractions,
     "Science": Icons.science,
@@ -83,14 +81,15 @@ class EventsData extends InheritedWidget {
     "Beach": Icons.beach_access,
     "Cruise": Icons.anchor,
     "Standup": Icons.mic,
+    "Fishing": Icons.phishing,
     //general
     "Tournament": Icons.emoji_events,
     "Premium": Icons.diamond,
     "Protest": Icons.priority_high,
     //misc
-    "Robots": Icons.precision_manufacturing,
-    "Gambling": Icons.casino,
-    "Animals": Icons.pets,
+    //"Robots": Icons.precision_manufacturing,
+    //"Gambling": Icons.casino,
+    //"Animals": Icons.pets,
   };
 
   @override

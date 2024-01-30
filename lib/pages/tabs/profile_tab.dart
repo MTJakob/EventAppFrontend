@@ -126,7 +126,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
                                     AppHttpInterface.of(context)
-                                        .register(
+                                        .updateUser(
                                       User(
                                         name: controllerName.text,
                                         surname: controllerSurname.text,

@@ -13,7 +13,7 @@ class AppHttpInterface extends InheritedWidget {
   final Function _setID;
 
   static String scheme = 'http';
-  static String host = "192.168.110.137";
+  static String host = "192.168.71.137";
   static int port = 5000;
   static Uri uri = Uri(scheme: scheme, host: host, port: port);
 
@@ -112,10 +112,13 @@ class AppHttpInterface extends InheritedWidget {
   }
 
   //wip
-  Future<List<String>> searchEvents(String input) async {
-    Response response = await get(uri.replace(path: "search", query: input));
+  Future<List<Event>> searchEvents(String input) async {
+    Response response = await post(uri.replace(path: "search"),
+        headers: headers, body: json.encode({"SearchWord": input}));
     if (response.statusCode == 200) {
-      return json.decode(response.body).cast<String>();
+      List list = json.decode(response.body);
+      List<Event> events = list.map((e) => Event.fromJson(e)).toList();
+      return events;
     } else {
       throw Exception("Error ${response.statusCode}: ${response.body}");
     }
