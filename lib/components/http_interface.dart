@@ -1,38 +1,54 @@
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:event_flutter_application/components/data_structures.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AppHttpInterface extends InheritedWidget {
   const AppHttpInterface(
-      {super.key, required super.child, this.userID, required Function setID})
-      : _setID = setID;
-
+      {super.key,
+      this.userID,
+      required this.refreshUser,
+      required this.storage,
+      required super.child});
   final int? userID;
 
-  final Function _setID;
+  final Function refreshUser;
+
+  final FlutterSecureStorage storage;
 
   static String scheme = 'http';
-  static String host = "192.168.71.137";
+  static String host = "192.168.59.137";
   static int port = 5000;
   static Uri uri = Uri(scheme: scheme, host: host, port: port);
 
   static Map<String, String> headers = {"Content-Type": "application/json"};
 
-  Future<String?> login(String email, String password) async {
+  Future<String?> logIn(String email, String password) async {
     Response response = await post(uri.replace(path: "login"),
         headers: headers,
         body: json.encode({"Email": email, "Password": password}));
     dynamic body = json.decode(response.body);
     switch (response.statusCode) {
       case 200:
-        _setID(body["user_id"]);
-        return null;
+        if (JWT.tryDecode(body['access_token']) != null) {
+          storage
+              .write(key: 'jwt', value: body['access_token'])
+              .then((value) => refreshUser());
+          return null;
+        } else {
+          throw JWTException('Invalid jwt: ${body["access_token"]}');
+        }
       case 404:
         return "Invalid email";
       default:
         return body["message"];
     }
+  }
+
+  void logOut() {
+    storage.delete(key: 'jwt').then((value) => refreshUser());
   }
 
   Future<Response> changePassword(String newPwd, String oldPwd) async {
@@ -41,10 +57,6 @@ class AppHttpInterface extends InheritedWidget {
         body: json.encode(
             {"OldPassword": oldPwd, "NewPassword": newPwd, "IDUser": userID}));
     return response;
-  }
-
-  void logOut() {
-    _setID(null);
   }
 
   Future<Response> register(User user) async {

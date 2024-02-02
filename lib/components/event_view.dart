@@ -99,7 +99,7 @@ class _EventCardState extends State<EventCard> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                             softWrap: true),
                         event.organiser!.id ==
-                                AppHttpInterface.of(context).userID!
+                                AppHttpInterface.of(context).userID
                             ? IconButton(
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(

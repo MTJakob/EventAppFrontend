@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
 
     void submit() {
       AppHttpInterface.of(context)
-          .login(loginController.text, pwdController.text)
+          .logIn(loginController.text, pwdController.text)
           .then((value) => value == null
               ? null
               : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
