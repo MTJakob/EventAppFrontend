@@ -1,4 +1,4 @@
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -32,13 +32,13 @@ class AppHttpInterface extends InheritedWidget {
     dynamic body = json.decode(response.body);
     switch (response.statusCode) {
       case 200:
-        if (JWT.tryDecode(body['access_token']) != null) {
+        if (JwtDecoder.tryDecode(body['access_token']) != null) {
           storage
               .write(key: 'jwt', value: body['access_token'])
               .then((value) => refreshUser());
           return null;
         } else {
-          throw JWTException('Invalid jwt: ${body["access_token"]}');
+          throw FormatException('Invalid jwt: ${body["access_token"]}');
         }
       case 404:
         return "Invalid email";

@@ -2,7 +2,7 @@ import 'package:event_flutter_application/pages/login_page.dart';
 import 'package:event_flutter_application/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'components/http_interface.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:event_flutter_application/components/title.dart';
 
@@ -32,9 +32,11 @@ class _MyAppState extends State<MyApp> {
         final Widget page;
         int? id;
         if (snapshot.connectionState == ConnectionState.done) {
-          JWT? jwt = JWT.tryDecode(snapshot.data ?? "");
-          if (jwt != null && jwt.payload["sub"] != null) {
-            id = jwt.payload["sub"];
+          Map<String, dynamic>? jwt = JwtDecoder.tryDecode(snapshot.data ?? "");
+          if (jwt != null &&
+              jwt["sub"] != null &&
+              !JwtDecoder.isExpired(snapshot.data!)) {
+            id = jwt["sub"];
             page = const MainPage();
           } else {
             page = const LoginPage();
