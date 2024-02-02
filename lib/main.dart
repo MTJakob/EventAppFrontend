@@ -26,44 +26,45 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Event Manager',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.amber.shade900, brightness: Brightness.dark),
-        useMaterial3: true,
-      ),
-      home: FutureBuilder(
-          future: storage.read(key: "jwt"),
-          builder: ((context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              JWT? jwt = JWT.tryDecode(snapshot.data ?? "");
-              final Widget page;
-              int? id;
-              if (jwt != null && jwt.payload["sub"] != null) {
-                id = jwt.payload["sub"];
-                page = const MainPage();
-              } else {
-                page = const LoginPage();
-              }
-              return AppHttpInterface(
-                  userID: id,
-                  refreshUser: refreshUser,
-                  storage: storage,
-                  child: page);
-            } else {
-              return Scaffold(
-                  appBar: AppBar(
-                    title: const TitleText(),
-                  ),
-                  body: const Center(child: CircularProgressIndicator()));
-            }
-          })),
+    return FutureBuilder(
+      future: storage.read(key: "jwt"),
+      builder: ((context, snapshot) {
+        final Widget page;
+        int? id;
+        if (snapshot.connectionState == ConnectionState.done) {
+          JWT? jwt = JWT.tryDecode(snapshot.data ?? "");
+          if (jwt != null && jwt.payload["sub"] != null) {
+            id = jwt.payload["sub"];
+            page = const MainPage();
+          } else {
+            page = const LoginPage();
+          }
+        } else {
+          page = Scaffold(
+              appBar: AppBar(
+                title: const TitleText(),
+              ),
+              body: const Center(child: CircularProgressIndicator()));
+        }
+        return AppHttpInterface(
+            userID: id,
+            refreshUser: refreshUser,
+            storage: storage,
+            child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Event Manager',
+                theme: ThemeData(
+                  colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+                  useMaterial3: true,
+                ),
+                darkTheme: ThemeData(
+                  colorScheme: ColorScheme.fromSeed(
+                      seedColor: Colors.amber.shade900,
+                      brightness: Brightness.dark),
+                  useMaterial3: true,
+                ),
+                home: page));
+      }),
     );
   }
 }

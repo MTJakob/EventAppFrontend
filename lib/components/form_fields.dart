@@ -32,7 +32,7 @@ class NameField extends StatelessWidget {
           maxLength: isLocked ? null : 20,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (String? current) {
-            return isAlpha(current!)
+            return isAlpha(current!.replaceAll(" ", ""))
                 ? null
                 : "Only english characters allowed!";
           },
@@ -350,9 +350,7 @@ class _MapInputState extends State<MapInput> with TickerProviderStateMixin {
     return FlutterMap(
         mapController: animatedController.mapController,
         options: MapOptions(
-            keepAlive: true,
-            initialCenter: pointer!,
-            initialZoom: 16),
+            keepAlive: true, initialCenter: pointer!, initialZoom: 16),
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
