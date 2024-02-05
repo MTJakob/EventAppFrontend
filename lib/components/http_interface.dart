@@ -18,12 +18,18 @@ class AppHttpInterface extends InheritedWidget {
 
   final FlutterSecureStorage storage;
 
-  static String scheme = 'http';
-  static String host = "192.168.59.137";
-  static int port = 5000;
-  static Uri uri = Uri(scheme: scheme, host: host, port: port);
+  static const String _scheme = 'http';
+  static const String _host = "192.168.115.137";
+  static const int _port = 5000;
+  static Uri uri = Uri(scheme: _scheme, host: _host, port: _port);
+
+  static const String jwtKey = 'jwt';
 
   static Map<String, String> headers = {"Content-Type": "application/json"};
+
+  Future<String?> getJWT() async {
+    return storage.read(key: jwtKey);
+  }
 
   Future<String?> logIn(String email, String password) async {
     Response response = await post(uri.replace(path: "login"),
@@ -34,7 +40,7 @@ class AppHttpInterface extends InheritedWidget {
       case 200:
         if (JwtDecoder.tryDecode(body['access_token']) != null) {
           storage
-              .write(key: 'jwt', value: body['access_token'])
+              .write(key: jwtKey, value: body['access_token'])
               .then((value) => refreshUser());
           return null;
         } else {
@@ -47,8 +53,16 @@ class AppHttpInterface extends InheritedWidget {
     }
   }
 
-  void logOut() {
-    storage.delete(key: 'jwt').then((value) => refreshUser());
+  Future<String?> logOut() async {
+    String? jwt = await getJWT();
+    Response response = await post(uri.replace(path: 'logout'),
+        headers: {"Authorization": "Bearer $jwt"});
+    if (response.statusCode == 200) {
+      storage.delete(key: jwtKey).then((value) => refreshUser());
+      return null;
+    } else {
+      return json.decode(response.body)['message'];
+    }
   }
 
   Future<Response> changePassword(String newPwd, String oldPwd) async {

@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: storage.read(key: "jwt"),
+      future: storage.read(key: AppHttpInterface.jwtKey),
       builder: ((context, snapshot) {
         final Widget page;
         int? id;

@@ -36,10 +36,6 @@ class _ProfileTabState extends State<ProfileTab> {
       controllerBirth.text = user.birthday!.toIso8601String().split("T")[0];
     });
 
-    void logOut() {
-      AppHttpInterface.of(context).logOut();
-    }
-
     void lockToggle() {
       setState(() {
         isLocked = !isLocked;
@@ -98,7 +94,18 @@ class _ProfileTabState extends State<ProfileTab> {
                               ActionChip(
                                   label: const Text("Log out"),
                                   avatar: const Icon(Icons.logout),
-                                  onPressed: logOut),
+                                  onPressed: () => AppHttpInterface.of(context)
+                                      .logOut()
+                                      .then(
+                                        (value) => value == null
+                                            ? null
+                                            : ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                content: Text(value),
+                                                duration:
+                                                    const Duration(seconds: 2),
+                                              )),
+                                      )),
                               ActionChip(
                                 label: const Text("Add event"),
                                 avatar: const Icon(Icons.event),
