@@ -37,7 +37,7 @@ class _RegistrationDialogState extends State<RegistrationDialog> {
         )
             .then((response) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(json.decode(response.body)["message"])));
+              SnackBar(content: Text(json.decode(response.body)["msg"])));
           if (response.statusCode == 201) Navigator.pop(context);
         });
       }

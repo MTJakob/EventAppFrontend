@@ -146,7 +146,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text(json.decode(
-                                                  response.body)["message"])));
+                                                  response.body)["msg"])));
                                       if (response.statusCode == 200) {
                                         lockToggle();
                                       }

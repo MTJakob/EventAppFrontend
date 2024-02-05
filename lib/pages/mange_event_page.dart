@@ -82,7 +82,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
 
         AppHttpInterface.of(context).placeEvent(event).then((response) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(json.decode(response.body)["message"]),
+            content: Text(json.decode(response.body)["msg"]),
             duration: const Duration(seconds: 2),
           ));
           if (response.statusCode == 201 || response.statusCode == 200) {
@@ -97,7 +97,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
           .deleteEvent(widget.eventData!)
           .then((response) {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(json.decode(response.body)["message"])));
+            SnackBar(content: Text(json.decode(response.body)["msg"])));
         if (response.statusCode == 202) {
           Navigator.of(context).popUntil(ModalRoute.withName("/"));
         }

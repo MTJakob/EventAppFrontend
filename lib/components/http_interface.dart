@@ -49,7 +49,7 @@ class AppHttpInterface extends InheritedWidget {
       case 404:
         return "Invalid email";
       default:
-        return body["message"];
+        return body["msg"];
     }
   }
 
@@ -61,7 +61,7 @@ class AppHttpInterface extends InheritedWidget {
       storage.delete(key: jwtKey).then((value) => refreshUser());
       return null;
     } else {
-      return json.decode(response.body)['message'];
+      return json.decode(response.body)['msg'];
     }
   }
 

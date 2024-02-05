@@ -27,7 +27,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
             .changePassword(newPwd.text, oldPwd.text)
             .then((response) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(json.decode(response.body)["message"])));
+              SnackBar(content: Text(json.decode(response.body)["msg"])));
           if (response.statusCode == 200) Navigator.pop(context);
         });
       }
