@@ -1,6 +1,7 @@
 import 'package:event_flutter_application/components/events_data.dart';
 import 'package:event_flutter_application/components/data_structures.dart';
 import 'package:event_flutter_application/components/http_interface.dart';
+import 'package:event_flutter_application/components/calendar_interface.dart';
 import 'package:event_flutter_application/pages/mange_event_page.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,7 @@ class _EventCardState extends State<EventCard> {
   }
 
   @override
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
     isAttending = EventsData.of(context).isAttending;
   }
@@ -109,21 +110,43 @@ class _EventCardState extends State<EventCard> {
                                   Icons.settings,
                                   color: Colors.grey,
                                 ))
-                            : IconButton(
-                                icon: const Icon(Icons.favorite),
-                                color: isAttending
-                                    ? Colors.red
-                                    : Theme.of(context).disabledColor,
-                                onPressed: () => AppHttpInterface.of(context)
-                                        .toggleAttending(event, isAttending)
-                                        .then((response) {
-                                      if (response.statusCode == 200 ||
-                                          response.statusCode == 202) {
-                                        setState(() {
-                                          isAttending = !isAttending;
-                                        });
-                                      }
-                                    })),
+                            : Row(
+                                textDirection: TextDirection.rtl,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                    IconButton(
+                                        icon: const Icon(Icons.favorite),
+                                        color: isAttending
+                                            ? Colors.red
+                                            : Theme.of(context).disabledColor,
+                                        onPressed: () =>
+                                            AppHttpInterface.of(context)
+                                                .toggleAttending(
+                                                    event, isAttending)
+                                                .then((response) {
+                                              if (response.statusCode == 200 ||
+                                                  response.statusCode == 202) {
+                                                setState(() {
+                                                  isAttending = !isAttending;
+                                                });
+                                              }
+                                            })
+                                            ),
+                                    isAttending
+                                        ? IconButton(
+                                            onPressed: () => CalendarInterface
+                                                    .of(context)
+                                                .addEvent(event)
+                                                .then((value) =>
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                value ?? "")))),
+                                            icon:
+                                                const Icon(Icons.edit_calendar))
+                                        : const SizedBox.shrink()
+                                  ]),
                       ],
                     )
                   ],

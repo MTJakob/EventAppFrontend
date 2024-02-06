@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
             id = jwt["sub"];
             page = const MainPage();
           } else {
+            storage.delete(key: AppHttpInterface.jwtKey);
             page = const LoginPage();
           }
         } else {
